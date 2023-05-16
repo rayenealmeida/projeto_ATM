@@ -27,7 +27,7 @@
 6. Notas
 7. Extrato
 8. Senha
-9. REcibo
+9. Recibo
 10. Teclado
 11. Tela
 12. Cédulas
