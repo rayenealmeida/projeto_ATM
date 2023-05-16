@@ -31,13 +31,23 @@
 10. Teclado
 11. Tela
 12. Cédulas
-13. Notas 
-14. Comprovante
+13. Comprovante
 
 
 
-| First Header  | Second Header |
+| Verbos  | Substantivos |
 | ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+| Content Cell  | Dinheiro  |
+| Content Cell  | Saldo  |
+|               | Conta |
+|               | Tela |
+|               | Cartão |
+|               | Notas |
+|               | Extrato |
+|               | Senha |
+|               | Recibo |
+|               | Teclado |
+|               | Tela |
+|               | Cédulas |
+|               | Comprovante |
 
