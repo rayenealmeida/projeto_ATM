@@ -1,5 +1,5 @@
 # Requisitos
-# Lista de verbos                               
+# Lista de verbos                  
 
 1. Sacar
 2. Depositar
@@ -40,16 +40,16 @@
 | Sacar  | Dinheiro  |
 | Depositar  | Saldo  |
 | Pagar | Conta |
-|       Consultar        | Tela |
-|    Cancelar           | Cartão |
-|          Confirmar     | Notas |
-|         Selecionar      | Extrato |
-|         Digitar      | Senha |
-|       Retirar        | Recibo |
-|      Emitir         | Teclado |
-|    Sair           | Tela |
-|      Visualizar | Cédulas |
-|       Transferir | Comprovante |
+| Consultar | Tela |
+| Cancelar | Cartão |
+| Confirmar | Notas |
+| Selecionar| Extrato |
+| Digitar | Senha |
+| Retirar| Recibo |
+| Emitir | Teclado |
+| Sair | Tela |
+| Visualizar | Cédulas |
+| Transferir | Comprovante |
 | Atualizar |  |
 | Verificar | |
 
