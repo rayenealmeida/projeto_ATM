@@ -37,17 +37,19 @@
 
 | Verbos  | Substantivos |
 | ------------- | ------------- |
-| Content Cell  | Dinheiro  |
-| Content Cell  | Saldo  |
-|               | Conta |
-|               | Tela |
-|               | Cartão |
-|               | Notas |
-|               | Extrato |
-|               | Senha |
-|               | Recibo |
-|               | Teclado |
-|               | Tela |
-|               | Cédulas |
-|               | Comprovante |
+| Sacar  | Dinheiro  |
+| Depositar  | Saldo  |
+| Pagar | Conta |
+|       Consultar        | Tela |
+|    Cancelar           | Cartão |
+|          Confirmar     | Notas |
+|         Selecionar      | Extrato |
+|         Digitar      | Senha |
+|       Retirar        | Recibo |
+|      Emitir         | Teclado |
+|    Sair           | Tela |
+|      Visualizar | Cédulas |
+|       Transferir | Comprovante |
+| Atualizar |  |
+| Verificar | |
 
