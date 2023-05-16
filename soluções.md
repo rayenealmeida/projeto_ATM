@@ -14,4 +14,4 @@ Para saber se á alterações
 Para mesclar as branchs (master e festure)
 gere o comando na master
 
-`git merge <nome da sua branch`
+`git merge <nome da sua branch>`
