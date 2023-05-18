@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-05-18T15:59:49.423Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="dmmgxnFkI6HHOAfXmyxt" version="21.3.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-05-18T16:00:30.532Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="3Af1v784eOKh70Q9GJHr" version="21.3.2" type="github">
   <diagram name="Página-1" id="yYYur9y8kuDgpSH_VH22">
     <mxGraphModel dx="806" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -31,8 +31,11 @@
         <mxCell id="gHLTcPCr11RhFiqcX0Ko-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="XhFESAYXLOcGuzse1d62-2" source="XhFESAYXLOcGuzse1d62-6" target="gHLTcPCr11RhFiqcX0Ko-10">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="gHLTcPCr11RhFiqcX0Ko-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="XhFESAYXLOcGuzse1d62-2" source="XhFESAYXLOcGuzse1d62-6" target="gHLTcPCr11RhFiqcX0Ko-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="XhFESAYXLOcGuzse1d62-6" value="Transações" style="rounded=0;whiteSpace=wrap;html=1;" parent="XhFESAYXLOcGuzse1d62-2" vertex="1">
-          <mxGeometry x="230" y="290" width="120" height="60" as="geometry" />
+          <mxGeometry x="180" y="270" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="gHLTcPCr11RhFiqcX0Ko-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="XhFESAYXLOcGuzse1d62-2" source="XhFESAYXLOcGuzse1d62-8" target="gHLTcPCr11RhFiqcX0Ko-8">
           <mxGeometry relative="1" as="geometry" />
@@ -80,6 +83,9 @@
         </mxCell>
         <mxCell id="gHLTcPCr11RhFiqcX0Ko-22" value="Soliciatar Crédito" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="XhFESAYXLOcGuzse1d62-2">
           <mxGeometry x="440" y="50" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gHLTcPCr11RhFiqcX0Ko-24" value="Realizar pagamentos programados&lt;span dir=&quot;ltr&quot; role=&quot;presentation&quot; style=&quot;left: 43.45%; top: 38.01%; font-size: calc(var(--scale-factor)*12.00px); font-family: serif;&quot;&gt; &lt;/span&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="XhFESAYXLOcGuzse1d62-2">
+          <mxGeometry x="264" y="340" width="120" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
