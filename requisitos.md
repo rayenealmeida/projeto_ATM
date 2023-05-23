@@ -25,6 +25,9 @@
 5. Senha
 6. Crédito
 7. Comprovante
+8. Banco
+9. Transações
+10. Cliente
 
 
 
@@ -37,9 +40,9 @@
 | Cancelar | Senha |
 | Confirmar | Crédito |
 | Selecionar| Comprovante |
-| Digitar |  |
-| Programar |  |
-| Emitir |  |
+| Digitar | Banco |
+| Programar | Cliente |
+| Emitir | Transações |
 | Sair |  |
 | Visualizar |  |
 | Transferir |  |
