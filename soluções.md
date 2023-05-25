@@ -7,7 +7,7 @@ Para entrar em outra branch
 
 `git checkout <nome da branch>`
 
-Para saber se á alterações
+Para saber se ha alterações
 
 `git status`
 
