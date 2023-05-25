@@ -11,7 +11,7 @@ Para saber se á alterações
 
 `git status`
 
-Para mesclar as branchs (master e festure)
+Para mesclar as branchs (master e feature)
 gere o comando na master
 
 `git merge <nome da sua branch>`
