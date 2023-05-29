@@ -24,9 +24,9 @@ janela = tk.Tk()
 janela.title("Caixa Eletrônico")
 
 # Carregar imagens
-tela_image = ImageTk.PhotoImage(Image.open("/home/rayene/Documentos/unb/2023.1/OO/projeto4/projeto_ATM/autocash/tela.png"))
-teclado_image = ImageTk.PhotoImage(Image.open("teclado.png"))
-local_saque_image = ImageTk.PhotoImage(Image.open("local_saque.png"))
+tela_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png"))
+teclado_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do teclado
+local_saque_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do local de saque 
 
 # Criar os elementos da interface
 tela_label = tk.Label(janela, image=tela_image)
