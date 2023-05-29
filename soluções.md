@@ -15,3 +15,4 @@ Para mesclar as branchs (master e feature)
 gere o comando na master
 
 `git merge <nome da sua branch>`
+
