@@ -1,4 +1,4 @@
-from tkinter import Tk, Label, Entry, Button
+import customtkinter, Label, Entry, Button
 from tinydb import TinyDB
 
 db = TinyDB('banco_de_dados.json')
@@ -10,13 +10,17 @@ def salvar_cadastro():
     cpf = entry_cpf.get()
     endereco = entry_endereco.get()
     renda = entry_renda.get()
+    senha = entry_senha.get()
+    
+def login():
+    cpf = entry_cpf
 
     # Salvar os dados no banco de dados
     db.insert({
         'nome': nome,
         'telefone': telefone,
         'data_nascimento': data_nascimento,
-        'cpf': cpf,
+        'cpf/cnpj': cpf,
         'endereco': endereco,
         'renda': renda
     })
@@ -28,8 +32,20 @@ def salvar_cadastro():
     entry_cpf.delete(0, 'end')
     entry_endereco.delete(0, 'end')
     entry_renda.delete(0, 'end')
+    entry_senha.delete(0, 'end')
 
-janela = Tk()
+
+janela = customtkinter.CTk()
+janela.geometry("400x300")
+janela.grid_columnconfigure(0, weight=1)
+
+def clique():
+    print("Solicitar Cadastro")
+    
+
+texto = customtkinter.CTkLabel(janela, text="Solicitar Cadastro")
+texto.pack(padx=10, pady=10)
+
 
 label_nome = Label(janela, text='Nome:')
 label_nome.pack()
@@ -61,7 +77,15 @@ label_renda.pack()
 entry_renda = Entry(janela)
 entry_renda.pack()
 
+label_senha = Label(janela, text='Senha:')
+label_senha.pack()
+entry_senha = Entry(janela)
+entry_senha.pack()
+
 button_salvar = Button(janela, text='Salvar', command=salvar_cadastro)
 button_salvar.pack()
+
+#button_login = Button(janela, text='Fazer Login', command=)
+#button_login.pack()
 
 janela.mainloop()
