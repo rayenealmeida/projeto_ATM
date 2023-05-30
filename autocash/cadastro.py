@@ -28,8 +28,18 @@ def salvar_cadastro():
     entry_cpf.delete(0, 'end')
     entry_endereco.delete(0, 'end')
     entry_renda.delete(0, 'end')
+    
+def abrir_janela_login():
+    janela.destroy()
+    janela.login = Tk()
 
 janela = Tk()
+janela.title("Solicitar Cadastro")
+largura = 400
+altura = 300
+x = (janela.winfo_screenwidth() - largura) // 2
+y = (janela.winfo_screenheight() - altura) // 2
+janela.geometry(f'{largura}x{altura}+{x}+{y}')
 
 label_nome = Label(janela, text='Nome:')
 label_nome.pack()
@@ -63,5 +73,8 @@ entry_renda.pack()
 
 button_salvar = Button(janela, text='Salvar', command=salvar_cadastro)
 button_salvar.pack()
+
+button_login= Button(janela, text='Login', command=abrir_janela_login)
+button_login.pack()
 
 janela.mainloop()
