@@ -50,6 +50,7 @@ verificar_button.pack()
 # teclado_label.pack()
 
 valor_label = tk.Label(janela, text="Digite o valor do saque:", background='#50c7e2')
+valor_label.place(x=100, y=500)
 valor_label.pack()
 
 valor_entry = tk.Entry(janela)
