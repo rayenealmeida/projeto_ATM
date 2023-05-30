@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import Label
 from PIL import ImageTk, Image
 
 def verificar_senha():
@@ -21,16 +22,31 @@ def sacar():
 
 # Criar a janela principal
 janela = tk.Tk()
+janela.geometry("600x600")
 janela.title("Caixa Eletrônico")
 
+
+
+imagem = Image.open("autocash/images/atm_bg.png")
+imagem = imagem.resize((600, 600), Image.ANTIALIAS)
+imagem_tk = ImageTk.PhotoImage(imagem)
+
+label = Label(janela, image=imagem_tk)
+label.place(x=0, y=0, relwidth=1, relheight=1)
+
+
 # Carregar imagens
-tela_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png"))
-teclado_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do teclado
-local_saque_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do local de saque 
+# tela_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png"))
+
+# tela_label = Label(janela, image=tela_image)
+# tela_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+# teclado_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do teclado
+# local_saque_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do local de saque 
 
 # Criar os elementos da interface
-tela_label = tk.Label(janela, image=tela_image)
-tela_label.pack()
+# tela_label = tk.Label(janela, image=tela_image)
+# tela_label.pack()
 
 senha_label = tk.Label(janela, text="Digite sua senha:")
 senha_label.pack()
@@ -41,10 +57,10 @@ senha_entry.pack()
 verificar_button = tk.Button(janela, text="Verificar senha", command=verificar_senha)
 verificar_button.pack()
 
-teclado_label = tk.Label(janela, image=teclado_image)
-teclado_label.pack()
+# teclado_label = tk.Label(janela, image=teclado_image)
+# teclado_label.pack()
 
-valor_label = tk.Label(janela, text="Digite o valor do saque:")
+valor_label = tk.Label(janela, text="Digite o valor do saque:", background='none')
 valor_label.pack()
 
 valor_entry = tk.Entry(janela)
@@ -53,8 +69,8 @@ valor_entry.pack()
 sacar_button = tk.Button(janela, text="Sacar", command=sacar)
 sacar_button.pack()
 
-local_saque_label = tk.Label(janela, image=local_saque_image)
-local_saque_label.pack()
+# local_saque_label = tk.Label(janela, image=local_saque_image)
+# local_saque_label.pack()
 
 mensagem_label = tk.Label(janela, text="")
 mensagem_label.pack()
