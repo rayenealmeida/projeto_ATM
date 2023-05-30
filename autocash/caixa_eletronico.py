@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import Label
 from PIL import ImageTk, Image
-
+#Cor azul #50c7e2
+# Cor cinza claro #d2d5d4
+# Cor cinza escuro #9b9b9b
 def verificar_senha():
     senha = senha_entry.get()
     
@@ -35,20 +37,7 @@ label = Label(janela, image=imagem_tk)
 label.place(x=0, y=0, relwidth=1, relheight=1)
 
 
-# Carregar imagens
-# tela_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png"))
-
-# tela_label = Label(janela, image=tela_image)
-# tela_label.place(x=0, y=0, relwidth=1, relheight=1)
-
-# teclado_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do teclado
-# local_saque_image = ImageTk.PhotoImage(Image.open("autocash/images/tela.png")) #Alterar com imagem do local de saque 
-
-# Criar os elementos da interface
-# tela_label = tk.Label(janela, image=tela_image)
-# tela_label.pack()
-
-senha_label = tk.Label(janela, text="Digite sua senha:")
+senha_label = tk.Label(janela, text="Digite sua senha:", background='#9b9b9b')
 senha_label.pack()
 
 senha_entry = tk.Entry(janela, show="*")
@@ -60,7 +49,7 @@ verificar_button.pack()
 # teclado_label = tk.Label(janela, image=teclado_image)
 # teclado_label.pack()
 
-valor_label = tk.Label(janela, text="Digite o valor do saque:", background='none')
+valor_label = tk.Label(janela, text="Digite o valor do saque:", background='#50c7e2')
 valor_label.pack()
 
 valor_entry = tk.Entry(janela)
