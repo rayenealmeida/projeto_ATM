@@ -27,7 +27,7 @@ def salvar_cadastro():
     
 def exibir_janela_confirmacao():
     janela_confirmacao = Toplevel(janela)
-    janela_confirmacao.title("Cadastro Aprovado")
+    janela_confirmacao.title("Cadastro Aprovado! Faça seu Login")
     janela_confirmacao.geometry("300x100")
     
     label_confirmacao = Label(janela_confirmacao, text="Cadastro aprovado")
