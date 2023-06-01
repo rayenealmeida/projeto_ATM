@@ -7,7 +7,7 @@ def verificar_login():
     cpf = entry_cpf_login.get()
     senha = entry_senha.get()
     
-    resultado = db.serch((where('cpf') == cpf) & (where('senha') == senha))
+    resultado = db.search((where('cpf') == cpf) & (where('senha') == senha))
     
     if resultado:
         print('Login realizado com sucesso!')
