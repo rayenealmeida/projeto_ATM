@@ -65,7 +65,7 @@ sacar_button.place(x=285, y=513)
 
 mensagem_label = tk.Label(janela, text="", background="#50c7e2")
 mensagem_label.pack()
-mensagem_label.place(x=100, y=180)
+mensagem_label.place(x=100, y=200)
 
 # Iniciar o loop da aplicação
 janela.mainloop()
