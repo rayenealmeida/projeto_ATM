@@ -26,8 +26,7 @@ def sacar():
 janela = tk.Tk()
 janela.geometry("600x600")
 janela.title("Caixa Eletrônico")
-
-
+janela.resizable(False, False)
 
 imagem = Image.open("autocash/images/atm_bg.png")
 imagem = imagem.resize((600, 600), Image.ANTIALIAS)
@@ -36,34 +35,37 @@ imagem_tk = ImageTk.PhotoImage(imagem)
 label = Label(janela, image=imagem_tk)
 label.place(x=0, y=0, relwidth=1, relheight=1)
 
-
-senha_label = tk.Label(janela, text="Digite sua senha:", background='#9b9b9b')
-senha_label.pack()
-
-senha_entry = tk.Entry(janela, show="*")
-senha_entry.pack()
-
-verificar_button = tk.Button(janela, text="Verificar senha", command=verificar_senha)
-verificar_button.pack()
-
-# teclado_label = tk.Label(janela, image=teclado_image)
-# teclado_label.pack()
-
 valor_label = tk.Label(janela, text="Digite o valor do saque:", background='#50c7e2')
-valor_label.place(x=100, y=500)
 valor_label.pack()
+valor_label.place(x=100, y=70)
 
 valor_entry = tk.Entry(janela)
 valor_entry.pack()
+valor_entry.place(x=100, y=90)
 
-sacar_button = tk.Button(janela, text="Sacar", command=sacar)
+senha_label = tk.Label(janela, text="Digite sua senha:", background='#50c7e2')
+senha_label.pack()
+senha_label.place(x=100, y=120)
+
+senha_entry = tk.Entry(janela, show="*")
+senha_entry.pack()
+senha_entry.place(x=100, y=140)
+
+verificar_button = tk.Button(janela, text="Verificar senha", command=verificar_senha)
+verificar_button.pack()
+verificar_button.place(x=100, y=160)
+
+
+sacar_button = tk.Button(janela, text="Sacar", command=sacar, background="#d2d5d4")
 sacar_button.pack()
+sacar_button.place(x=285, y=513)
 
 # local_saque_label = tk.Label(janela, image=local_saque_image)
 # local_saque_label.pack()
 
-mensagem_label = tk.Label(janela, text="")
+mensagem_label = tk.Label(janela, text="", background="#50c7e2")
 mensagem_label.pack()
+mensagem_label.place(x=100, y=180)
 
 # Iniciar o loop da aplicação
 janela.mainloop()
