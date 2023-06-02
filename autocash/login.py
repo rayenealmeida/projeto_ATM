@@ -1,4 +1,6 @@
-from tkinter import Tk, Label, Entry, Button
+import tkinter as tk
+from tkinter import Label
+from PIL import ImageTk, Image
 from tinydb import TinyDB, where
 
 db = TinyDB('banco_de_dados.json')
@@ -14,20 +16,29 @@ def verificar_login():
     else:
         print('CPF ou senha inválidos!')
 
-janela_login = Tk()
+janela_login = tk.Tk()
+janela_login.geometry("600x600")
 janela_login.title("Login")
+janela_login.resizable(False, False)
+
+imagem = Image.open("autocash/images/atm_bg.png")
+imagem = imagem.resize((600, 600), Image.ANTIALIAS)
+imagem_tk = ImageTk.PhotoImage(imagem)
+
+label = Label(janela_login, image=imagem_tk)
+label.place(x=0, y=0, relwidth=1, relheight=1)
 
 label_cpf_login= Label(janela_login, text= 'CPF:')
 label_cpf_login.pack()
-entry_cpf_login = Entry(janela_login)
+entry_cpf_login = tk.Entry(janela_login)
 entry_cpf_login.pack()
 
 label_senha = Label(janela_login, text='Senha:')
 label_senha.pack()
-entry_senha = Entry(janela_login, show='*')
+entry_senha = tk.Entry(janela_login, show='*')
 entry_senha.pack()
 
-button_login = Button(janela_login, text= 'Entrar', command= verificar_login)
+button_login = tk.Button(janela_login, text= 'Entrar', command= verificar_login)
 button_login.pack()
 
 janela_login.mainloop()
