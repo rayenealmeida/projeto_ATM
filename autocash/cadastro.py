@@ -1,7 +1,12 @@
+import os
 from tkinter import Tk, Label, Entry, Button, Frame, Toplevel
 from tinydb import TinyDB
 
-db = TinyDB('banco_de_dados.json')
+# Obtém o caminho do diretório atual
+diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+caminho_banco_dados = os.path.join(diretorio_atual, 'banco_de_dados.json')
+
+db = TinyDB(caminho_banco_dados)
 
 def salvar_cadastro():
     nome = entry_nome.get()

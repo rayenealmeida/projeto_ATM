@@ -1,9 +1,14 @@
+import os
 import tkinter as tk
 from tkinter import Label
 from PIL import ImageTk, Image
 from tinydb import TinyDB, where
 
-db = TinyDB('banco_de_dados.json')
+# Obtém o caminho do diretório atual
+diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+caminho_banco_dados = os.path.join(diretorio_atual, 'banco_de_dados.json')
+
+db = TinyDB(caminho_banco_dados)
 
 def verificar_login():
     cpf = entry_cpf_login.get()
