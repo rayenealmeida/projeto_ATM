@@ -4,6 +4,8 @@ from PIL import ImageTk, Image
 #Cor azul #50c7e2
 # Cor cinza claro #d2d5d4
 # Cor cinza escuro #9b9b9b
+diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+
 def verificar_senha():
     senha = senha_entry.get()
     
@@ -28,7 +30,7 @@ janela.geometry("600x600")
 janela.title("Caixa Eletrônico")
 janela.resizable(False, False)
 
-imagem = Image.open("autocash/images/atm_bg.png")
+imagem = Image.open(diretorio_atual + "/images/atm_bg.png")
 imagem = imagem.resize((600, 600), Image.ANTIALIAS)
 imagem_tk = ImageTk.PhotoImage(imagem)
 
