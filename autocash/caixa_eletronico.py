@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import Label
 from PIL import ImageTk, Image
