@@ -26,7 +26,7 @@ janela_login.geometry("600x600")
 janela_login.title("Login")
 janela_login.resizable(False, False)
 
-imagem = Image.open("autocash/images/atm_bg.png")
+imagem = Image.open(diretorio_atual + "/images/atm_bg.png")
 imagem = imagem.resize((600, 600), Image.ANTIALIAS)
 imagem_tk = ImageTk.PhotoImage(imagem)
 
