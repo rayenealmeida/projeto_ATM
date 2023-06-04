@@ -35,15 +35,20 @@ label.place(x=0, y=0, relwidth=1, relheight=1)
 
 label_cpf_login= Label(janela_login, text= 'CPF:')
 label_cpf_login.pack()
+label_cpf_login.place(x=100, y=130)
 entry_cpf_login = tk.Entry(janela_login)
 entry_cpf_login.pack()
+entry_cpf_login.place(x=100, y=150)
 
 label_senha = Label(janela_login, text='Senha:')
 label_senha.pack()
+label_senha.place(x=100, y=180)
 entry_senha = tk.Entry(janela_login, show='*')
 entry_senha.pack()
+entry_senha.place(x=100, y=200)
 
 button_login = tk.Button(janela_login, text= 'Entrar', command= verificar_login)
 button_login.pack()
+button_login.place(x=100, y=230)
 
 janela_login.mainloop()
