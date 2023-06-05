@@ -17,6 +17,12 @@ imagem_tk = ImageTk.PhotoImage(imagem)
 label = Label(janela, image=imagem_tk)
 label.place(x=0, y=0, relwidth=1, relheight=1)
 
+opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
+
+label_opcoes = Label(janela, text=opcoes_texto, font=("Montserrat", 16), justify="left", bg="#50c7e2")
+label_opcoes.pack()
+label_opcoes.place(x=90, y=90)
+
 button_login = tk.Button(janela, text= '1')
 button_login.pack()
 button_login.place(x=117, y=404)
