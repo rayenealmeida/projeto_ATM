@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import Label
 from PIL import ImageTk, Image
 from tinydb import TinyDB, where
+import subprocess
 
 
 # Obtém o caminho do diretório atual
@@ -11,7 +12,8 @@ caminho_banco_dados = os.path.join(diretorio_atual, 'banco_de_dados.json')
 
 db = TinyDB(caminho_banco_dados)
 
-
+def abrir_menu():
+   subprocess.run(['python', 'menu.py'])
 
 
 def verificar_login():
@@ -22,9 +24,14 @@ def verificar_login():
     
     if resultado:
         label_resultado['text'] = 'Login realizado com sucesso!'        
+        label_resultado['bg'] = '#50c7e2'
+        abrir_menu() 
+        janela_login.destroy()  
+
     else:
         label_resultado['text'] = 'CPF ou senha inválidos!'
-
+        label_resultado['bg'] = '#50c7e2'
+                 
 janela_login = tk.Tk()
 janela_login.geometry("600x600")
 janela_login.title("Login")
