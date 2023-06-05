@@ -70,5 +70,6 @@ mensagem_label = tk.Label(janela, text="", background="#50c7e2")
 mensagem_label.pack()
 mensagem_label.place(x=100, y=200)
 
+
 # Iniciar o loop da aplicação
 janela.mainloop()
