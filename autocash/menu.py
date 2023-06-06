@@ -26,7 +26,7 @@ label_opcoes.place(x=90, y=90)
 
 def abrir_saque():
     
-    subprocess.run(['python', 'saque.py'])
+    subprocess.run(['python', diretorio_atual + '/saque.py'])
 
     
 button_login = tk.Button(janela, text= '1', width=2)
