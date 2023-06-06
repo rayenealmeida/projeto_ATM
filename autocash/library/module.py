@@ -87,17 +87,6 @@ class Cliente:
         resultado = gerente.aprovar_conta(self)
         return resultado
     
-
-
-gerente = Gerente()
-cliente = cliente
-aprovado = cliente.solicita_aprovacao(gerente)
-if aprovado:
-    print("Conta aprovada!")
-else:
-    print("Conta não aprovada.")
-
-
 class SolicitaCredito:
     def __init__(self, valor_solicitado, renda, qtd_parcelas):
         self.valor_solicitado = valor_solicitado

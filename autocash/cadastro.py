@@ -78,6 +78,10 @@ class CadastroCliente:
 
 cadastro_cliente = CadastroCliente()
 
+def abrir_janela_login():
+    janela.destroy()
+    import login
+
 janela = Tk()
 janela.title("Solicitar Cadastro")
 largura = 400
