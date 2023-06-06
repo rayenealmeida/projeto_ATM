@@ -25,8 +25,8 @@ def verificar_login():
     if resultado:
         label_resultado['text'] = 'Login realizado com sucesso!'        
         label_resultado['bg'] = '#50c7e2'
-        abrir_menu() 
-        janela_login.destroy()  
+        janela_login.destroy() 
+        abrir_menu()  
 
     else:
         label_resultado['text'] = 'CPF ou senha inválidos!'
@@ -37,7 +37,7 @@ janela_login.geometry("600x600")
 janela_login.title("Login")
 janela_login.resizable(False, False)
 
-imagem = Image.open(diretorio_atual + "/images/atm_bg.png")
+imagem = Image.open(diretorio_atual + "/images/atm_bg_insere_cartao.png")
 imagem = imagem.resize((600, 600), Image.ANTIALIAS)
 imagem_tk = ImageTk.PhotoImage(imagem)
 
