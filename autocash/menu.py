@@ -2,6 +2,7 @@ import os
 import tkinter as tk
 from tkinter import Label
 from PIL import ImageTk, Image
+import subprocess
 
 diretorio_atual = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,11 +24,16 @@ label_opcoes = Label(janela, text=opcoes_texto, font=("Montserrat", 16), justify
 label_opcoes.pack()
 label_opcoes.place(x=90, y=90)
 
+def abrir_saque():
+    
+    subprocess.run(['python', 'saque.py'])
+
+    
 button_login = tk.Button(janela, text= '1', width=2)
 button_login.pack()
 button_login.place(x=113, y=404)
 
-button_login = tk.Button(janela, text= '2', width=2)
+button_login = tk.Button(janela, text= '2', width=2, command=abrir_saque)
 button_login.pack()
 button_login.place(x=166, y=404)
 
