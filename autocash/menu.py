@@ -22,7 +22,7 @@ opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pag
 
 label_opcoes = Label(janela_menu, text=opcoes_texto, font=("Montserrat", 14), justify="left", bg="#50c7e2")
 label_opcoes.pack()
-label_opcoes.place(x=90, y=90)
+label_opcoes.place(x=70, y=90)
 
 def abrir_saque():
     janela_menu.destroy()
