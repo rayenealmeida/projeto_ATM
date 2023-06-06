@@ -11,13 +11,10 @@ caminho_banco_dados = os.path.join(diretorio_atual, 'banco_de_dados.json')
 
 db = TinyDB(caminho_banco_dados)
 
-<<<<<<< HEAD
 def abrir_menu():
    subprocess.run(['python', 'menu.py'])
 
 
-=======
->>>>>>> feature/kadu
 def verificar_login():
     cpf = entry_cpf_login.get()
     senha = entry_senha.get()
