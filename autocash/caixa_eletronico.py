@@ -34,13 +34,13 @@ janela.resizable(False, False)
 
 def mudar_imagem():
     imagem_original = Image.open(diretorio_atual + "/images/atm_bg_dinheiro.png")
-    # nova_imagem = imagem_original.resize((600, 600))
+    nova_imagem = imagem_original.resize((600, 600))
     nova_imagem = ImageTk.PhotoImage(nova_imagem)
     label.config(image=nova_imagem)
     label.image = nova_imagem  # Atualiza a referência da imagem
 
 imagem = Image.open(diretorio_atual + "/images/atm_bg.png")
-# imagem = imagem.resize((600, 600))
+imagem = imagem.resize((600, 600))
 imagem_tk = ImageTk.PhotoImage(imagem)
 
 label = Label(janela, image=imagem_tk)
