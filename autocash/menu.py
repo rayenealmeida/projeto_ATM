@@ -20,7 +20,11 @@ label.place(x=0, y=0, relwidth=1, relheight=1)
 
 opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
 
+<<<<<<< HEAD
 label_opcoes = Label(janela_menu, text=opcoes_texto, font=("Consolas", 13), justify="left", bg="#50c7e2")
+=======
+label_opcoes = Label(janela_menu, text=opcoes_texto, font=("Consolas", 14), justify="left", bg="#50c7e2")
+>>>>>>> 0ab0d01e1bad7f1dd2a8c4865a06ccc634cb8d82
 label_opcoes.pack()
 label_opcoes.place(x=90, y=90)
 
