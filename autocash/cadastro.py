@@ -14,38 +14,42 @@ class CadastroCliente:
     def __init__(self):
         self.gerente = Gerente()
 
-        def salvar_cadastro(self):
-            nome = entry_nome.get()
-            telefone = entry_telefone.get()
-            data_nascimento = entry_data_nascimento.get()
-            cpf_ou_cnpj = entry_cpf_ou_cnpj.get()
-            endereco = entry_endereco.get()
-            renda = entry_renda.get()
-            senha = entry_senha.get()
+    def salvar_cadastro(self):
+        nome = entry_nome.get()
+        telefone = entry_telefone.get()
+        data_nascimento = entry_data_nascimento.get()
+        cpf_ou_cnpj = entry_cpf_ou_cnpj.get()
+        endereco = entry_endereco.get()
+        renda = entry_renda.get()
+        senha = entry_senha.get()
 
-            if nome and telefone and data_nascimento and cpf_ou_cnpj and endereco and renda and senha:
-                cliente = Cliente(cpf_ou_cnpj, nome, telefone, endereco, data_nascimento, renda)
+        # Verificar se todos os campos estão preenchidos
+        if nome and telefone and data_nascimento and cpf_ou_cnpj and endereco and renda and senha:
+            cliente = Cliente(cpf_ou_cnpj, nome, telefone, endereco, data_nascimento, renda)
 
-                # Salvar os dados no banco de dados
-                db.insert({
-                    'nome': nome,
-                    'telefone': telefone,
-                    'data_nascimento': data_nascimento,
-                    'cpf': cpf_ou_cnpj,
-                    'endereco': endereco,
-                    'renda': renda,
-                    'senha': senha,
-                })
+            # Salvar os dados no banco de dados
+            db.insert({
+                'nome': nome,
+                'telefone': telefone,
+                'data_nascimento': data_nascimento,
+                'cpf': cpf_ou_cnpj,
+                'endereco': endereco,
+                'renda': renda,
+                'senha': senha,
+            })
 
-                aprovado = self.gerente.aprovar_conta(cliente)
-                if aprovado:
-                    self.exibir_janela_confirmacao()
-                else:
-                    self.exibir_janela_reprovacao()
-
-                self.limpar_campos()
+            aprovado = self.gerente.aprovar_conta(cliente)
+            if aprovado:
+                self.exibir_janela_confirmacao()
             else:
-                print("Por favor, preencha todos os campos.")
+                self.exibir_janela_reprovacao()
+
+            self.limpar_campos()
+        else:
+            # Exibir uma mensagem de erro ou alerta informando que todos os campos devem ser preenchidos
+            # Aqui está um exemplo simples utilizando uma caixa de diálogo
+            import tkinter.messagebox as messagebox
+            messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
 
     def exibir_janela_confirmacao(self):
         janela_confirmacao = Toplevel(janela)
