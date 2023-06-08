@@ -147,7 +147,7 @@ def abrir_menu():
 
     opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
 
-    label_opcoes = tk.Label(janela, text=opcoes_texto, font=("Consolas", 14), justify="left", bg="#50c7e2").place(x=70, y=90)
+    label_opcoes = tk.Label(janela, text=opcoes_texto, font=("Montserrat", 14), justify="left", bg="#50c7e2").place(x=70, y=90)
 
     button_1 = tk.Button(janela, text= '1', width=2).place(x=113, y=404)
     button_2 = tk.Button(janela, text= '2', width=2, command=abrir_saque).place(x=166, y=404)
