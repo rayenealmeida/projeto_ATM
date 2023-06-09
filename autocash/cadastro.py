@@ -1,4 +1,5 @@
 import os
+import os
 from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
 from tkinter import Tk, Label, Entry, Button, Frame, Toplevel
 from tinydb import TinyDB
