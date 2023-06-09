@@ -248,6 +248,30 @@ class AutocashApp:
             def exibir_mensagem(mensagem):
                 messagebox.showinfo("Mensagem", mensagem) 
                 
+        # INÍCIO DA FUNÇÃO LOGIN GERENTE #
+        def realizar_login_gerente(gerente):
+            def mudar_imagem():
+                imagem_original = Image.open(self.diretorio_atual + "/images/atm_bg_pagamento.png")
+                nova_imagem = imagem_original.resize((600, 600))
+                nova_imagem = ImageTk.PhotoImage(nova_imagem)
+                label.config(image=nova_imagem)
+                label.image = nova_imagem
+
+            def fazer_login():
+                nome_gerente = nome_gerente.get()
+                senha_gerente = senha_gerente.get()
+                
+                if gerente.login(nome_gerente, senha_gerente):
+                    print("Login do gerente bem-sucedido!")
+                    mudar_imagem()
+                    
+                else:
+                    print("Credenciais inválidas. Login do gerente falhou.")
+                    
+            janela = tk.Tk()
+            janela.geometry("600x600")
+            janela.title("Login do Gerente")
+                
             self.janela.mainloop()
 
         # INÍCIO DA FUNÇÃO MENU #
@@ -275,7 +299,7 @@ class AutocashApp:
             self.janela.mainloop()
             
         while True:
-            opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  1 - Fazer login\n  2 - Realizar cadastro'
+            opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  0 - Sou Gerente 1 - Fazer login\n  2 - Realizar cadastro'
 
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("Montserrat", 14), justify="left", bg="#50c7e2", wraplength=300).place(x=80, y=90)
 
