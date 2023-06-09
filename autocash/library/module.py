@@ -11,17 +11,26 @@ class Conta:
     def apagar_conta(self, cliente):
         self.db.remove((Query().cpf == cliente.cpf) & (Query().conta == cliente.numero_conta))
 
-
 class Gerente:
+    def __init__(self):
+        self.db = TinyDB('banco.db')
+        self.definir_credenciais_gerente()
+
+    def definir_credenciais_gerente(self):
+        if not self.db.search(Query().tipo == 'gerente'):
+            self.db.insert({'tipo': 'gerente', 'username': 'Gerente', 'password': '123'})
+
+    def login(self, username, password):
+        credentials = self.db.search((Query().tipo == 'gerente') & (Query().username == username) & (Query().password == password))
+        return len(credentials) > 0
+
     def aprovar_conta(self, cliente):
-        # Verifica se a renda é suficiente para aprovar a conta
         if cliente.renda >= 450:
             return True
         else:
             return False
 
     def aprovar_credito(self, cliente):
-        # Verifica se a renda é suficiente para aprovar o crédito
         if cliente.renda * 5 <= cliente.valor_solicitado:
             return True
         else:
@@ -29,7 +38,6 @@ class Gerente:
 
     def excluir_conta(self, conta):
         conta.apagar_conta()
-
 
 class Transacoes:
     def __init__(self):
