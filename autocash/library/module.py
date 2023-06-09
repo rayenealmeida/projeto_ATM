@@ -44,7 +44,6 @@ class Transacoes:
                 valor_parcela = debito['valor'] / cliente.qtd_parcelas
                 self.registrar_transacao('retirada', valor_parcela, conta_origem=cliente.numero_conta)
 
-
     def registrar_transacao(self, tipo, valor, conta_origem=None, conta_destino=None):
         data_atual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.db.insert({'data': data_atual, 'tipo': tipo, 'valor': valor, 'conta_origem': conta_origem, 'conta_destino': conta_destino})
@@ -73,7 +72,17 @@ class Transacoes:
                 saldo += transacao['valor']
         return saldo
 
-
+    def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False):
+        if agendar:
+            self.registrar_transacao('agendamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+        else:
+            saldo = self.calcular_saldo(conta_origem)
+            if saldo >= valor:
+                self.registrar_transacao('pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+                return True
+            else:
+                return False
+            
 class Cliente:
     def __init__(self, cpf, nome, telefone, endereco, data_nascimento, renda):
         self.cpf = cpf
