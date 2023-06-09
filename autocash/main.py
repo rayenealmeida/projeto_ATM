@@ -2,6 +2,8 @@ import os, subprocess, tkinter as tk
 from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
 from PIL import ImageTk, Image
 from tinydb import TinyDB, where
+import tkinter.messagebox as messagebox
+import json
 
 diretorio_atual = os.path.dirname(os.path.abspath(__file__))
 db = TinyDB(diretorio_atual + '/banco_de_dados.json')
@@ -137,6 +139,113 @@ def abrir_saque():
     button_0 = tk.Button(janela, text= '0', width=2).place(x=166, y=512)
     button_enter = tk.Button(janela, text= 'Enter').place(x=285, y=513)
 
+# INÍCIO DA FUNÇÃO PAGAMENTO #
+def realizar_pagamento():
+    def mudar_imagem():
+        imagem_original = Image.open(diretorio_atual + "/images/atm_bg_pagamento.png")
+        nova_imagem = imagem_original.resize((600, 600))
+        nova_imagem = ImageTk.PhotoImage(nova_imagem)
+        label.config(image=nova_imagem)
+        label.image = nova_imagem
+    imagem = Image.open(diretorio_atual + "/images/atm_bg.png")
+    imagem = imagem.resize((600, 600))
+    imagem_tk = ImageTk.PhotoImage(imagem)
+    label = tk.Label(janela, image=imagem_tk)
+    label.place(x=0, y=0)
+    label.pack(fill="both", expand=True)
+
+    conta_origem_label = tk.Label(janela, text="Número da conta de origem:", background="#50c7e2")
+    conta_origem_label.pack()
+    conta_origem_label.place(x=100, y=90)
+
+    conta_origem_entry = tk.Entry(janela)
+    conta_origem_entry.pack()
+    conta_origem_entry.place(x=100, y=110)
+
+    conta_destino_label = tk.Label(janela, text="Número da conta de destino:", background="#50c7e2")
+    conta_destino_label.pack()
+    conta_destino_label.place(x=100, y=140)
+
+    conta_destino_entry = tk.Entry(janela)
+    conta_destino_entry.pack()
+    conta_destino_entry.place(x=100, y=160)
+
+    valor_label = tk.Label(janela, text="Valor do pagamento:", background="#50c7e2")
+    valor_label.pack()
+    valor_label.place(x=100, y=190)
+
+    valor_entry = tk.Entry(janela)
+    valor_entry.pack()
+    valor_entry.place(x=100, y=210)
+
+    agendar_var = tk.IntVar()
+    agendar_checkbox = tk.Checkbutton(janela, text="Agendar pagamento", variable=agendar_var, background="#50c7e2")
+    agendar_checkbox.place(x=100, y=240)
+    
+    def processar_pagamento():
+        conta_origem = conta_origem_entry.get()
+        conta_destino = conta_destino_entry.get()
+        valor = float(valor_entry.get())
+
+        if saldo_suficiente(conta_origem, valor):
+            atualizar_saldo(conta_origem, -valor)
+            atualizar_saldo(conta_destino, valor)
+            registrar_transacao(conta_origem, conta_destino, valor)
+            exibir_mensagem("Pagamento realizado com sucesso!")
+        else:
+            exibir_mensagem("Falha no pagamento: Saldo insuficiente.")
+    def atualizar_saldo(conta, valor):
+        with open('banco_de_dados.json', 'r') as file:
+            dados = json.load(file)
+        
+        saldo = dados['contas'][conta]['saldo']
+        saldo += valor
+        dados['contas'][conta]['saldo'] = saldo
+
+        with open('banco_de_dados.json', 'w') as file:
+            json.dump(dados, file)
+
+    def saldo_suficiente(conta, valor):
+        with open('banco_de_dados.json', 'r') as file:
+            dados = json.load(file)
+        if 'contas' in dados and conta in dados['contas']:
+            saldo = dados['contas'][conta]['saldo']
+            return saldo >= valor
+        else:
+            return False
+
+    def registrar_transacao(conta_origem, conta_destino, valor):
+        with open('banco_de_dados.json', 'r') as file:
+            dados = json.load(file)
+        
+        transacao = {
+            'conta_origem': conta_origem,
+            'conta_destino': conta_destino,
+            'valor': valor
+        }
+
+        dados['transacoes'].append(transacao)
+
+        with open('banco_de_dados.json', 'w') as file:
+            json.dump(dados, file)
+            
+            
+    button_1 = tk.Button(janela, text= '1', width=2).place(x=113, y=404)
+    button_2 = tk.Button(janela, text= '2', width=2).place(x=166, y=404)
+    button_3 = tk.Button(janela, text= '3', width=2).place(x=219, y=404)
+    button_4 = tk.Button(janela, text= '4', width=2).place(x=113, y=440)
+    button_5 = tk.Button(janela, text= '5', width=2).place(x=166, y=440)
+    button_6 = tk.Button(janela, text= '6', width=2).place(x=219, y=440)
+    button_7 = tk.Button(janela, text= '7', width=2).place(x=113, y=476)
+    button_8 = tk.Button(janela, text= '8', width=2).place(x=166, y=476)
+    button_9 = tk.Button(janela, text= '9', width=2).place(x=219, y=476)
+    button_0 = tk.Button(janela, text= '0', width=2).place(x=166, y=512)
+    button_enter = tk.Button(janela, text= 'Enter', command= processar_pagamento).place(x=285, y=513)
+
+    
+    def exibir_mensagem(mensagem):
+        messagebox.showinfo("Mensagem", mensagem) 
+        
     janela.mainloop()
 
 # INÍCIO DA FUNÇÃO MENU #
@@ -152,7 +261,7 @@ def abrir_menu():
     button_1 = tk.Button(janela, text= '1', width=2).place(x=113, y=404)
     button_2 = tk.Button(janela, text= '2', width=2, command=abrir_saque).place(x=166, y=404)
     button_3 = tk.Button(janela, text= '3', width=2).place(x=219, y=404)
-    button_4 = tk.Button(janela, text= '4', width=2).place(x=113, y=440)
+    button_4 = tk.Button(janela, text= '4', width=2, command=realizar_pagamento).place(x=113, y=440)
     button_5 = tk.Button(janela, text= '5', width=2).place(x=166, y=440)
     button_6 = tk.Button(janela, text= '6', width=2).place(x=219, y=440)
     button_7 = tk.Button(janela, text= '7', width=2).place(x=113, y=476)
@@ -162,8 +271,7 @@ def abrir_menu():
     button_enter = tk.Button(janela, text= 'Enter').place(x=285, y=513)
 
     janela.mainloop()
-
-
+    
 while True:
     opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  1 - Fazer login\n  2 - Realizar cadastro'
 
