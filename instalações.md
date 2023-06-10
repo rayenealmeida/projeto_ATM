@@ -4,6 +4,3 @@ Para o TinyDB
 
 Para o tkinter
 `pip install tkinter`
-
-Para o qlite3
-`pip install pysqlite3`
