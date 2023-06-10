@@ -299,7 +299,7 @@ class AutocashApp:
             self.janela.mainloop()
             
         while True:
-            opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  0 - Sou Gerente 1 - Fazer login\n  2 - Realizar cadastro'
+            opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  0 - Sou Gerente\n 1 - Fazer login\n  2 - Realizar cadastro'
 
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("Montserrat", 14), justify="left", bg="#50c7e2", wraplength=300).place(x=80, y=90)
 
