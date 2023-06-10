@@ -1,7 +1,7 @@
 import os, subprocess, tkinter as tk
 from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
 from PIL import ImageTk, Image
-from tinydb import TinyDB, where
+from tinydb import TinyDB, where, Query
 import tkinter.messagebox as messagebox
 import json
 
@@ -161,81 +161,62 @@ class AutocashApp:
             label.pack(fill="both", expand=True)
 
             conta_origem_label = tk.Label(self.janela, text="Número da conta de origem:", background="#50c7e2")
-            conta_origem_label.pack()
             conta_origem_label.place(x=100, y=90)
 
             conta_origem_entry = tk.Entry(self.janela)
-            conta_origem_entry.pack()
             conta_origem_entry.place(x=100, y=110)
 
             conta_destino_label = tk.Label(self.janela, text="Número da conta de destino:", background="#50c7e2")
-            conta_destino_label.pack()
             conta_destino_label.place(x=100, y=140)
 
             conta_destino_entry = tk.Entry(self.janela)
-            conta_destino_entry.pack()
             conta_destino_entry.place(x=100, y=160)
 
             valor_label = tk.Label(self.janela, text="Valor do pagamento:", background="#50c7e2")
-            valor_label.pack()
             valor_label.place(x=100, y=190)
 
             valor_entry = tk.Entry(self.janela)
-            valor_entry.pack()
             valor_entry.place(x=100, y=210)
 
             agendar_var = tk.IntVar()
             agendar_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_var, background="#50c7e2")
             agendar_checkbox.place(x=100, y=240)
-            
-            def processar_pagamento():
-                conta_origem = conta_origem_entry.get()
-                conta_destino = conta_destino_entry.get()
-                valor = float(valor_entry.get())
-
-                if saldo_suficiente(conta_origem, valor):
-                    atualizar_saldo(conta_origem, -valor)
-                    atualizar_saldo(conta_destino, valor)
-                    registrar_transacao(conta_origem, conta_destino, valor)
-                    exibir_mensagem("Pagamento realizado com sucesso!")
-                else:
-                    exibir_mensagem("Falha no pagamento: Saldo insuficiente.")
-            def atualizar_saldo(conta, valor):
-                with open('banco_de_dados.json', 'r') as file:
-                    dados = json.load(file)
                 
-                saldo = dados['contas'][conta]['saldo']
-                saldo += valor
-                dados['contas'][conta]['saldo'] = saldo
-
-                with open('banco_de_dados.json', 'w') as file:
-                    json.dump(dados, file)
-
-            def saldo_suficiente(conta, valor):
-                with open('banco_de_dados.json', 'r') as file:
-                    dados = json.load(file)
-                if 'contas' in dados and conta in dados['contas']:
-                    saldo = dados['contas'][conta]['saldo']
-                    return saldo >= valor
+            def verificar_saldo(conta_origem, valor_pagamento):
+                conta = self.db.search(where('_default').exists() & (where('_default') != {}))
+                if conta:
+                    saldo = conta[0]['_default'].get(conta_origem, {}).get('renda', 0)
+                    if saldo >= valor_pagamento:
+                        return True
+                    else:
+                        return False
                 else:
                     return False
+            def realizar_pagamento_final():
+                # Obter os dados da conta de origem, conta de destino e valor do pagamento
+                conta_origem = conta_origem_entry.get()
+                conta_destino = conta_destino_entry.get()
+                valor_pagamento = float(valor_entry.get())
 
-            def registrar_transacao(conta_origem, conta_destino, valor):
-                with open('banco_de_dados.json', 'r') as file:
-                    dados = json.load(file)
-                
-                transacao = {
-                    'conta_origem': conta_origem,
-                    'conta_destino': conta_destino,
-                    'valor': valor
-                }
+                # Verificar se a conta de origem possui saldo suficiente
+                if verificar_saldo(conta_origem, valor_pagamento):
+                    # Realizar o pagamento
+                    # Reduzir o saldo da conta de origem
+                    conta = self.db.search(where('_default').exists() & (where('_default') != {}))
+                    conta[0]['_default'].get(conta_origem, {})['renda'] -= valor_pagamento
 
-                dados['transacoes'].append(transacao)
+                    # Aumentar o saldo da conta de destino
+                    conta[0]['_default'].get(conta_destino, {})['renda'] += valor_pagamento
 
-                with open('banco_de_dados.json', 'w') as file:
-                    json.dump(dados, file)
-                    
-                    
+                    # Atualizar os dados no banco de dados
+                    self.db.write_back(conta)
+
+                    # Exibir mensagem de sucesso
+                    exibir_mensagem("Pagamento realizado com sucesso!")
+                else:
+                    # Exibir mensagem de saldo insuficiente
+                    messagebox.showerror("Saldo Insuficiente", "A conta de origem não possui saldo suficiente.")
+
             button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2).place(x=166, y=404)
             button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
@@ -246,7 +227,7 @@ class AutocashApp:
             button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
-            button_enter = tk.Button(self.janela, text= 'Enter', command= processar_pagamento).place(x=285, y=513)
+            button_enter = tk.Button(self.janela, text= 'Enter', command= realizar_pagamento_final).place(x=285, y=513)
             mudar_imagem()
      
         

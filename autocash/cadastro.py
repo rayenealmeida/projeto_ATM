@@ -21,7 +21,7 @@ class CadastroCliente:
         data_nascimento = entry_data_nascimento.get()
         cpf_ou_cnpj = entry_cpf_ou_cnpj.get()
         endereco = entry_endereco.get()
-        renda = entry_renda.get()
+        renda = float(entry_renda.get())
         senha = entry_senha.get()
 
         # Verificar se todos os campos estão preenchidos
