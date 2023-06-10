@@ -45,19 +45,15 @@ class AutocashApp:
             def logar():
                 cpf = entry_cpf_login.get()
                 senha = entry_senha.get()
-                
-                for indice, cliente in enumerate(self.db.all()):
-                    if cliente['cpf'] == cpf and cliente['senha'] == senha:
-                        label_cliente['text'] = 'Login realizado com sucesso!\n Tecle "#" para continuar.'
-                        label_cliente['bg'] = '#50c7e2'
-                        cliente_id = indice+1
-                        abrir_menu(cliente_id)
-                        print(cliente_id)    
-                        #if cliente_id == 1 (gerente)                   
-                    else:
-                        label_cliente['text'] = 'CPF ou senha inválidos!'
-                        label_cliente['bg'] = '#50c7e2'
-
+                cliente = self.db.search((where('cpf') == cpf) & (where('senha') == senha))
+                print(cliente)
+                if cliente:
+                    label_cliente['text'] = 'Login realizado com sucesso!'        
+                    label_cliente['bg'] = '#50c7e2'
+                    abrir_menu()  
+                else:
+                    label_cliente['text'] = 'CPF ou senha inválidos!'
+                    label_cliente['bg'] = '#50c7e2'
                         
             label_cpf_login= tk.Label(self.janela, text= 'CPF:', background="#50c7e2")
             label_cpf_login.pack()
@@ -84,8 +80,6 @@ class AutocashApp:
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
             button_enter = tk.Button(self.janela, text= 'Enter', command=logar).place(x=285, y=513)
-            button_asterisco = tk.Button(self.janela, text= '*', width=2).place(x=113, y=512)
-            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
             label_cliente = tk.Label(self.janela, text='', background="#50c7e2")
             label_cliente.place(x=100, y=260)
@@ -98,6 +92,7 @@ class AutocashApp:
                 nova_imagem = ImageTk.PhotoImage(nova_imagem)
                 label.config(image=nova_imagem)
                 label.image = nova_imagem 
+            mudar_imagem()
 
             imagem = Image.open(self.diretorio_atual + "/images/atm_bg.png")
             imagem = imagem.resize((600, 600))
@@ -155,6 +150,8 @@ class AutocashApp:
                 nova_imagem = ImageTk.PhotoImage(nova_imagem)
                 label.config(image=nova_imagem)
                 label.image = nova_imagem
+            mudar_imagem()
+            
             imagem = Image.open(self.diretorio_atual + "/images/atm_bg.png")
             imagem = imagem.resize((600, 600))
             imagem_tk = ImageTk.PhotoImage(imagem)
@@ -249,53 +246,20 @@ class AutocashApp:
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
             button_enter = tk.Button(self.janela, text= 'Enter', command= processar_pagamento).place(x=285, y=513)
-            button_asterisco = tk.Button(self.janela, text= '*', width=2).place(x=113, y=512)
-            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
             
             def exibir_mensagem(mensagem):
                 messagebox.showinfo("Mensagem", mensagem) 
-                
-        # INÍCIO DA FUNÇÃO LOGIN GERENTE #
-        def realizar_login_gerente(gerente):
-            def mudar_imagem():
-                imagem_original = Image.open(self.diretorio_atual + "/images/atm_bg_pagamento.png")
-                nova_imagem = imagem_original.resize((600, 600))
-                nova_imagem = ImageTk.PhotoImage(nova_imagem)
-                label.config(image=nova_imagem)
-                label.image = nova_imagem
-
-            def fazer_login():
-                nome_gerente = nome_gerente.get()
-                senha_gerente = senha_gerente.get()
-                
-                if gerente.login(nome_gerente, senha_gerente):
-                    print("Login do gerente bem-sucedido!")
-                    mudar_imagem()
-                    
-                else:
-                    print("Credenciais inválidas. Login do gerente falhou.")
-                    
-            janela = tk.Tk()
-            janela.geometry("600x600")
-            janela.title("Login do Gerente")
-                
-            self.janela.mainloop()
 
         # INÍCIO DA FUNÇÃO MENU #
-        def abrir_menu(cliente_id):
+        def abrir_menu():
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
             label.place(x=0, y=0, relwidth=1, relheight=1)
-            cliente = self.db.get(doc_id=cliente_id)
-            # Se tiver testando, descomente a linha abaixo, e comente a linha acima
-            # cliente = self.db.get(doc_id=4)
-
-            label_cliente = tk.Label(self.janela, text='Olá, ' + cliente["nome"] + ".", font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
 
             opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
 
-            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#50c7e2").place(x=90, y=90)
+            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("Montserrat", 14), justify="left", bg="#50c7e2").place(x=70, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2, command=abrir_saque).place(x=166, y=404)
@@ -308,8 +272,6 @@ class AutocashApp:
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
             button_enter = tk.Button(self.janela, text= 'Enter').place(x=285, y=513)
-            button_asterisco = tk.Button(self.janela, text= '*', width=2).place(x=113, y=512)
-            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
             self.janela.mainloop()
             
@@ -327,10 +289,8 @@ class AutocashApp:
             button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
             button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
-            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)            
             button_enter = tk.Button(self.janela, text= 'Enter').place(x=285, y=513)
-            button_asterisco = tk.Button(self.janela, text= '*', width=2).place(x=113, y=512)
-            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
             self.janela.mainloop()
 
