@@ -1,7 +1,7 @@
 import os, subprocess, tkinter as tk
 from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
 from PIL import ImageTk, Image
-from tinydb import TinyDB, where
+from tinydb import TinyDB, where, Query
 import tkinter.messagebox as messagebox
 import json
 
@@ -160,13 +160,13 @@ class AutocashApp:
             label.place(x=0, y=0)
             label.pack(fill="both", expand=True)
 
-            conta_origem_label = tk.Label(self.janela, text="Seu nome:", background="#50c7e2")
+            conta_origem_label = tk.Label(self.janela, text="Número da conta de origem:", background="#50c7e2")
             conta_origem_label.place(x=100, y=90)
 
             conta_origem_entry = tk.Entry(self.janela)
             conta_origem_entry.place(x=100, y=110)
 
-            conta_destino_label = tk.Label(self.janela, text="Nome do destinatário:", background="#50c7e2")
+            conta_destino_label = tk.Label(self.janela, text="Número da conta de destino:", background="#50c7e2")
             conta_destino_label.place(x=100, y=140)
 
             conta_destino_entry = tk.Entry(self.janela)
@@ -181,7 +181,7 @@ class AutocashApp:
             agendar_var = tk.IntVar()
             agendar_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_var, background="#50c7e2")
             agendar_checkbox.place(x=100, y=240)
-            
+                
             button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2).place(x=166, y=404)
             button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
