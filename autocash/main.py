@@ -287,7 +287,9 @@ class AutocashApp:
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
             label.place(x=0, y=0, relwidth=1, relheight=1)
-            cliente = self.db.get(doc_id=4) #mudar paea doc_id=cliente_id
+            cliente = self.db.get(doc_id=cliente_id)
+            # Se tiver testando, descomente a linha abaixo, e comente a linha acima
+            # cliente = self.db.get(doc_id=4)
 
             label_cliente = tk.Label(self.janela, text='Olá, ' + cliente["nome"] + ".", font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
 
@@ -318,7 +320,7 @@ class AutocashApp:
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2, command=realizar_cadastro).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2, command=abrir_menu(4)).place(x=219, y=404)
+            button_3 = tk.Button(self.janela, text= '3', width=2, command=abrir_menu).place(x=219, y=404)
             button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
             button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
             button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
