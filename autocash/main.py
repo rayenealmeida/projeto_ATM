@@ -143,6 +143,8 @@ class AutocashApp:
             button_enter = tk.Button(self.janela, text= 'Enter').place(x=285, y=513)
 
         # INÍCIO DA FUNÇÃO PAGAMENTO #
+        def exibir_mensagem(mensagem):
+                messagebox.showinfo("Mensagem", mensagem) 
         def realizar_pagamento():
             def mudar_imagem():
                 imagem_original = Image.open(self.diretorio_atual + "/images/atm_bg_pagamento.png")
@@ -246,10 +248,6 @@ class AutocashApp:
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
             button_enter = tk.Button(self.janela, text= 'Enter', command= processar_pagamento).place(x=285, y=513)
             mudar_imagem()
-            
-            def exibir_mensagem(mensagem):
-                messagebox.showinfo("Mensagem", mensagem) 
-                
      
         
         # INÍCIO DA FUNÇÃO MENU #
