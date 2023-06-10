@@ -150,7 +150,6 @@ class AutocashApp:
                 nova_imagem = ImageTk.PhotoImage(nova_imagem)
                 label.config(image=nova_imagem)
                 label.image = nova_imagem
-            mudar_imagem()
             
             imagem = Image.open(self.diretorio_atual + "/images/atm_bg.png")
             imagem = imagem.resize((600, 600))
@@ -246,11 +245,13 @@ class AutocashApp:
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
             button_enter = tk.Button(self.janela, text= 'Enter', command= processar_pagamento).place(x=285, y=513)
-
+            mudar_imagem()
             
             def exibir_mensagem(mensagem):
                 messagebox.showinfo("Mensagem", mensagem) 
-
+                
+     
+        
         # INÍCIO DA FUNÇÃO MENU #
         def abrir_menu():
             imagem_tk = ImageTk.PhotoImage(imagem)
@@ -276,7 +277,7 @@ class AutocashApp:
             self.janela.mainloop()
             
         while True:
-            opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  0 - Sou Gerente\n 1 - Fazer login\n  2 - Realizar cadastro'
+            opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n1 - Fazer login\n2 - Realizar cadastro'
 
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("Montserrat", 14), justify="left", bg="#50c7e2", wraplength=300).place(x=80, y=90)
 
