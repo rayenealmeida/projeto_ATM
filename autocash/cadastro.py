@@ -30,6 +30,7 @@ class CadastroCliente:
 
             # Salvar os dados no banco de dados
             db.insert({
+                'nível': 1,
                 'nome': nome,
                 'telefone': telefone,
                 'data_nascimento': data_nascimento,
@@ -88,7 +89,6 @@ cadastro_cliente = CadastroCliente()
 
 def abrir_janela_login():
     janela.destroy()
-    import login
 
 janela = Tk()
 janela.title("Solicitar Cadastro")
