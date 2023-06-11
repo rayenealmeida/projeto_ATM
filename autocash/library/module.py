@@ -1,9 +1,11 @@
 from datetime import datetime
+import os
 from tinydb import TinyDB, Query
 
 class Conta:
     def __init__(self):
-        self.db = TinyDB('banco.db')
+        self.diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+        self.db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')
 
     def criar_conta(self, cliente):
         self.db.insert({'cpf': cliente.cpf, 'nome': cliente.nome, 'conta': cliente.numero_conta})
@@ -12,18 +14,6 @@ class Conta:
         self.db.remove((Query().cpf == cliente.cpf) & (Query().conta == cliente.numero_conta))
 
 class Gerente:
-    def __init__(self):
-        self.db = TinyDB('banco.db')
-        self.definir_credenciais_gerente()
-
-    def definir_credenciais_gerente(self):
-        if not self.db.search(Query().tipo == 'gerente'):
-            self.db.insert({'tipo': 'gerente', 'username': 'Gerente', 'password': '123'})
-
-    def login(self, username, password):
-        credentials = self.db.search((Query().tipo == 'gerente') & (Query().username == username) & (Query().password == password))
-        return len(credentials) > 0
-
     def aprovar_conta(self, cliente):
         if cliente.renda >= 450:
             return True
@@ -40,9 +30,6 @@ class Gerente:
         conta.apagar_conta()
 
 class Transacoes:
-    def __init__(self):
-        self.db = TinyDB('banco.db')
-
     def verificar_debitos(self, cliente):
         data_atual = datetime.now().date()
         debitos = self.db.search((Query().conta_origem == cliente.numero_conta) & (Query().tipo == 'credito'))
@@ -61,7 +48,7 @@ class Transacoes:
 
     def saque(self, conta, valor):
         # Verifica o saldo antes de fazer o saque
-        saldo = self.calcular_saldo(conta)
+        saldo= 2250
         if saldo >= valor:
             self.registrar_transacao('saque', valor, conta_origem=conta)
             return True
@@ -71,14 +58,13 @@ class Transacoes:
     def deposito(self, conta, valor):
         self.registrar_transacao('deposito', valor, conta_destino=conta)
 
-    def calcular_saldo(self, conta):
-        saldo = 0
-        for transacao in self.db:
-            if transacao['conta_origem'] == conta:
-                saldo -= transacao['valor']
-            if transacao['conta_destino'] == conta:
-                saldo += transacao['valor']
-        return saldo
+    # def calcular_saldo(self, conta):
+    #     for transacao in self.db:
+    #         if transacao['conta_origem'] == conta:
+    #             saldo -= transacao['valor']
+    #         if transacao['conta_destino'] == conta:
+    #             saldo += transacao['valor']
+    #     return saldo
 
     def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False):
         if agendar:
