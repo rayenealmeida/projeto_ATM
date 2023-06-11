@@ -142,6 +142,8 @@ class AutocashApp:
                 nova_imagem = ImageTk.PhotoImage(imagem)
                 label.configure(image=nova_imagem)
                 label.image = nova_imagem
+                entry_valor.config(state="disabled")
+                button_enter.config(state="disabled")
 
             cliente = self.db.get(doc_id=cliente_id)
             transacao = Transacoes()
@@ -180,7 +182,8 @@ class AutocashApp:
             button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
-            button_enter = tk.Button(self.janela, text='Enter', command=lambda: sacar(cliente_id)).place(x=285, y=513)
+            button_enter = tk.Button(self.janela, text='Enter', command=lambda: sacar(cliente_id))
+            button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
                 
