@@ -46,7 +46,11 @@ class CadastroCliente:
                     'renda': renda,
                     'senha': senha,
                     'transacoes': '',
-                    'saldo': '',
+                    'saldo': 0,
+                    'solicita_credito': 0,
+                    'valor_solicitado': 0,
+                    'dia_para_cobranca': '',
+                    'solicita_exclusao': 0,
                 })
 
                 aprovado = self.gerente.aprovar_conta(cliente)
