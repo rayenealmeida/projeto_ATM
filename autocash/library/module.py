@@ -1,17 +1,19 @@
 from datetime import datetime
 import os
+import json
 from tinydb import TinyDB, Query
 
 class Conta:
     def __init__(self):
-        self.diretorio_atual = os.path.dirname(os.path.abspath(__file__))
-        self.db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')
+        self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
+        caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
+        self.db = TinyDB(caminho_banco_dados)
 
-    def criar_conta(self, cliente):
-        self.db.insert({'cpf': cliente.cpf, 'nome': cliente.nome, 'conta': cliente.numero_conta})
+    # def criar_conta(self, cliente):
+    #     self.db.insert({'cpf': cliente.cpf, 'nome': cliente.nome, 'conta': cliente.numero_conta})
 
-    def apagar_conta(self, cliente):
-        self.db.remove((Query().cpf == cliente.cpf) & (Query().conta == cliente.numero_conta))
+    # def apagar_conta(self, cliente):
+    #     self.db.remove((Query().cpf == cliente.cpf) & (Query().conta == cliente.numero_conta))
 
 class Gerente:
     def aprovar_conta(self, cliente):
@@ -30,6 +32,11 @@ class Gerente:
         conta.apagar_conta()
 
 class Transacoes:
+    def __init__(self):
+        self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
+        caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
+        self.db = TinyDB(caminho_banco_dados)
+    
     def verificar_debitos(self, cliente):
         data_atual = datetime.now().date()
         debitos = self.db.search((Query().conta_origem == cliente.numero_conta) & (Query().tipo == 'credito'))
@@ -41,30 +48,50 @@ class Transacoes:
 
     def registrar_transacao(self, tipo, valor, conta_origem=None, conta_destino=None):
         data_atual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        self.db.insert({'data': data_atual, 'tipo': tipo, 'valor': valor, 'conta_origem': conta_origem, 'conta_destino': conta_destino})
+
+        # Recupera as transações existentes do banco de dados e cria uma nova transação
+        transacoes = self.db.get(doc_id=conta_origem)['transacoes'] 
+        nova_transacao = {
+            'data': data_atual,
+            'tipo': tipo,
+            'valor': valor,
+            'conta_origem': conta_origem,
+            'conta_destino': conta_destino
+        }
+        
+        # Verifica se transacoes é uma lista e add a nova transação à lista
+        if isinstance(transacoes, list):
+            transacoes.append(nova_transacao)
+        else:
+            # Converte a string em uma lista vazia e add a nova transação
+            transacoes = json.loads(transacoes) if transacoes else []
+            transacoes.append(nova_transacao)
+        # Converte em string
+        transacoes_str = json.dumps(transacoes)
+        # Atualiza o valor no banco de dados
+        self.db.update({'transacoes': transacoes}, doc_ids=[conta_origem])
+
 
     def extrato(self, conta):
         return self.db.search((Query().conta_origem == conta) | (Query().conta_destino == conta))
 
+# SAQUE OK #
     def saque(self, conta, valor):
-        # Verifica o saldo antes de fazer o saque
-        saldo= 2250
-        if saldo >= valor:
+        cliente = self.db.get(doc_id=conta)
+        saldo = cliente['saldo']
+
+        if saldo >= valor and saldo != 0:
+            novo_saldo = saldo - valor
+            print(novo_saldo, saldo, valor)
             self.registrar_transacao('saque', valor, conta_origem=conta)
+            self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
             return True
         else:
             return False
+#############
 
     def deposito(self, conta, valor):
         self.registrar_transacao('deposito', valor, conta_destino=conta)
-
-    # def calcular_saldo(self, conta):
-    #     for transacao in self.db:
-    #         if transacao['conta_origem'] == conta:
-    #             saldo -= transacao['valor']
-    #         if transacao['conta_destino'] == conta:
-    #             saldo += transacao['valor']
-    #     return saldo
 
     def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False):
         if agendar:
