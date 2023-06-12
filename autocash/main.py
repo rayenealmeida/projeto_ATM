@@ -137,7 +137,7 @@ class AutocashApp:
             label.image = nova_imagem
             
             def atualiza_tela(valor):
-                label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']-valor) + '\n\n       REALIZAR SAQUE:', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=50)
+                label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']-valor) + '\n\nREALIZAR SAQUE:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
                 imagem = Image.open(self.diretorio_atual + "/images/atm_bg_dinheiro.png")
                 nova_imagem = ImageTk.PhotoImage(imagem)
                 label.configure(image=nova_imagem)
@@ -163,8 +163,8 @@ class AutocashApp:
                         mensagem_label.pack()
                         mensagem_label.place(x=100, y=200)
 
-            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\n       REALIZAR SAQUE:', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=50)
-            label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=300)
+            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR SAQUE:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
+            label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=340)
 
             label_valor= tk.Label(self.janela, text= 'Valor:', background="#5FC0E6")
             label_valor.pack()
@@ -227,11 +227,11 @@ class AutocashApp:
             label.place(x=0, y=0, relwidth=1, relheight=1)
             cliente = self.db.get(doc_id=cliente_id)
 
-            label_cabecalho = tk.Label(self.janela, text='Olá, ' + cliente["nome"] + ".", font=('normal', 10), justify="left", bg="#5FC0E6").place(x=120, y=50)
+            label_cabecalho = tk.Label(self.janela, text='Olá, ' + cliente["nome"] + ".", font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=50)
 
             opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
 
-            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#5FC0E6").place(x=90, y=90)
+            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#5FC0E6").place(x=70, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text='2', width=2, command=lambda: abrir_saque(cliente_id)).place(x=166, y=404)
