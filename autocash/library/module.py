@@ -75,23 +75,36 @@ class Transacoes:
     def extrato(self, conta):
         return self.db.search((Query().conta_origem == conta) | (Query().conta_destino == conta))
 
-# SAQUE OK #
+    # SAQUE OK #
     def saque(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
 
-        if saldo >= valor and saldo != 0:
+        if saldo >= valor and valor != 0:
             novo_saldo = saldo - valor
-            print(novo_saldo, saldo, valor)
+            novo_saldo = round(novo_saldo, 2)
+            # print(novo_saldo, saldo, valor)
             self.registrar_transacao('saque', valor, conta_origem=conta)
             self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
             return True
         else:
             return False
-#############
 
+    # DEPOSITO OK #
     def deposito(self, conta, valor):
-        self.registrar_transacao('deposito', valor, conta_destino=conta)
+        cliente = self.db.get(doc_id=conta)
+        saldo = cliente['saldo']
+
+        if valor > 0:
+            novo_saldo = saldo + valor
+            novo_saldo = round(novo_saldo, 2)
+            # print(novo_saldo, saldo, valor)
+            self.registrar_transacao('deposito', valor, conta_origem=conta)
+            self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
+            return True
+        else:
+            return False
+
 
     def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False):
         if agendar:
