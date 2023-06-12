@@ -186,8 +186,9 @@ class AutocashApp:
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
+        
         # INÍCIO DA FUNÇÃO PAGAMENTO
-        def realizar_pagamento():
+        def realizar_pagamento(cliente_id):
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
             label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -217,7 +218,30 @@ class AutocashApp:
             agendar_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_var, background="#50c7e2")
             agendar_checkbox.place(x=100, y=240)
             
+            def atualiza_tela(valor):
+                label_cliente = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']-valor) + '\n\n       REALIZAR SAQUE:', font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
+                imagem = Image.open(self.diretorio_atual + "/images/atm_bg_dinheiro.png")
+                nova_imagem = ImageTk.PhotoImage(imagem)
+                label.configure(image=nova_imagem)
+                label.image = nova_imagem
+                valor_entry.config(state="disabled")
+                button_enter.config(state="disabled")
+            
+            cliente = self.db.get(doc_id=cliente_id)
+            transacao = Transacoes()
 
+            def pagar():
+                valor = valor_entry.get()
+                
+                if valor:
+                    valor= float(valor)
+                    print(valor)
+                    if transacao.realizar_pagamento(cliente_id, valor):
+                        atualiza_tela(valor)
+                        mensagem_label = tk_label(self.janela, text="Pagamento Realizado")
+                        
+                
+                
         
         # INÍCIO DA FUNÇÃO MENU #
         def abrir_menu(cliente_id):
