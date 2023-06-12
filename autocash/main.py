@@ -187,6 +187,7 @@ class AutocashApp:
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
+            
         # INÍCIO DA FUNÇÃO PAGAMENTO
         def realizar_pagamento():
             imagem_tk = ImageTk.PhotoImage(imagem)
