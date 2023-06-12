@@ -59,11 +59,11 @@ class AutocashApp:
             print('GERENTE ON!')
 
 
-        # INÍCIO DA FUNÇÃO REALIZAR CADASTRO #
+        # INÍCIO DA FUNÇÃO REALIZAR CADASTRO: OK #
         def realizar_cadastro():
             subprocess.run(['python', self.diretorio_atual +'/cadastro.py'])
 
-        # INÍCIO DA FUNÇÃO LOGIN #
+        # INÍCIO DA FUNÇÃO LOGIN: OK #
         def fazer_login():
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
