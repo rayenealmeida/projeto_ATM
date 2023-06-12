@@ -40,7 +40,7 @@ class AutocashApp:
             carregar_imagem()
 
             gerente = self.db.get(doc_id=cliente_id)
-            label_gerenre = tk.Label(self.janela, text='Olá, ' + gerente["nome"] + ".", font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
+            label_gerenre = tk.Label(self.janela, text='Olá, ' + gerente["nome"] + ".", font=('normal', 10), justify="left", bg="#5FC0E6").place(x=120, y=50)
 
             # Criando a barra de rolagem
             scrollbar = ttk.Scrollbar(self.janela, orient=tk.VERTICAL)
@@ -84,7 +84,7 @@ class AutocashApp:
                 for indice, cliente in enumerate(self.db.all()):
                     if cliente['cpf'] == cpf and cliente['senha'] == senha:
                         label_cliente['text'] = 'Login realizado com sucesso!'
-                        label_cliente['bg'] = '#50c7e2'
+                        label_cliente['bg'] = '#5FC0E6'
                         cliente_id = indice+1
                         usuario = self.db.get(doc_id=cliente_id)
                         if usuario['cadastro_nivel'] == 2: 
@@ -93,16 +93,16 @@ class AutocashApp:
                             abrir_menu(cliente_id)                   
                     else:
                         label_cliente['text'] = 'CPF ou senha inválidos!'
-                        label_cliente['bg'] = '#50c7e2'
+                        label_cliente['bg'] = '#5FC0E6'
        
-            label_cpf_login= tk.Label(self.janela, text= 'CPF:', background="#50c7e2")
+            label_cpf_login= tk.Label(self.janela, text= 'CPF:', background="#5FC0E6")
             label_cpf_login.pack()
             label_cpf_login.place(x=100, y=130)
             entry_cpf_login = tk.Entry(self.janela)
             entry_cpf_login.pack()
             entry_cpf_login.place(x=100, y=150)
 
-            label_senha = tk.Label(self.janela, text='Senha:', background="#50c7e2")
+            label_senha = tk.Label(self.janela, text='Senha:', background="#5FC0E6")
             label_senha.pack()
             label_senha.place(x=100, y=180)
             entry_senha = tk.Entry(self.janela, show='*')
@@ -123,7 +123,7 @@ class AutocashApp:
             button_asterisco = tk.Button(self.janela, text= '*', width=2).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
-            label_cliente = tk.Label(self.janela, text='', background="#50c7e2")
+            label_cliente = tk.Label(self.janela, text='', background="#5FC0E6")
             label_cliente.place(x=100, y=260)
 
         # FUNÇÃO SAQUE: OK #
@@ -137,7 +137,7 @@ class AutocashApp:
             label.image = nova_imagem
             
             def atualiza_tela(valor):
-                label_cliente = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']-valor) + '\n\n       REALIZAR SAQUE:', font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
+                label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']-valor) + '\n\nREALIZAR SAQUE:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
                 imagem = Image.open(self.diretorio_atual + "/images/atm_bg_dinheiro.png")
                 nova_imagem = ImageTk.PhotoImage(imagem)
                 label.configure(image=nova_imagem)
@@ -155,17 +155,18 @@ class AutocashApp:
                     print(valor)
                     if transacao.saque(cliente_id, valor):
                         atualiza_tela(valor)
-                        mensagem_label = tk.Label(self.janela, text="Saque realizado com sucesso, seu saldo atual é:\nR$ " + str(cliente['saldo']-valor), background="#50c7e2")
+                        mensagem_label = tk.Label(self.janela, text="Saque realizado com sucesso, seu saldo atual é:\nR$ " + str(cliente['saldo']-valor), background="#5FC0E6")
                         mensagem_label.pack()
-                        mensagem_label.place(x=100, y=200)
+                        mensagem_label.place(x=90, y=200)
                     else:
-                        mensagem_label = tk.Label(self.janela, text="Saldo insuficiente. Saque não realizado", background="#50c7e2")
+                        mensagem_label = tk.Label(self.janela, text="Saldo insuficiente. Saque não realizado", background="#5FC0E6")
                         mensagem_label.pack()
                         mensagem_label.place(x=100, y=200)
 
-            label_cliente = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\n       REALIZAR SAQUE:', font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
+            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR SAQUE:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
+            label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=340)
 
-            label_valor= tk.Label(self.janela, text= 'Valor:', background="#50c7e2")
+            label_valor= tk.Label(self.janela, text= 'Valor:', background="#5FC0E6")
             label_valor.pack()
             label_valor.place(x=100, y=130)
             entry_valor = tk.Entry(self.janela)
@@ -186,7 +187,11 @@ class AutocashApp:
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
+<<<<<<< HEAD
         
+=======
+            
+>>>>>>> 0f7f49b0a3eeb1616ae71813ba30a827bd0d2fb7
         # INÍCIO DA FUNÇÃO PAGAMENTO
         def realizar_pagamento(cliente_id):
             imagem_tk = ImageTk.PhotoImage(imagem)
@@ -197,25 +202,25 @@ class AutocashApp:
             label.config(image=nova_imagem)
             label.image = nova_imagem
 
-            conta_origem_label = tk.Label(self.janela, text="Número da conta de origem:", background="#50c7e2")
+            conta_origem_label = tk.Label(self.janela, text="Número da conta de origem:", background="#5FC0E6")
             conta_origem_label.pack()
             conta_origem_label.place(x=100, y=90)
             conta_origem_entry = tk.Entry(self.janela)
             conta_origem_entry.place(x=100, y=110)
 
-            conta_destino_label = tk.Label(self.janela, text="Número da conta de destino:", background="#50c7e2")
+            conta_destino_label = tk.Label(self.janela, text="Número da conta de destino:", background="#5FC0E6")
             conta_destino_label.pack()
             conta_destino_label.place(x=100, y=140)
             conta_destino_entry = tk.Entry(self.janela)
             conta_destino_entry.place(x=100, y=160)
 
-            valor_label = tk.Label(self.janela, text="Valor do pagamento:", background="#50c7e2")
+            valor_label = tk.Label(self.janela, text="Valor do pagamento:", background="#5FC0E6")
             valor_label.place(x=100, y=190)
             valor_entry = tk.Entry(self.janela)
             valor_entry.place(x=100, y=210)
             
             agendar_var = tk.IntVar()
-            agendar_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_var, background="#50c7e2")
+            agendar_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_var, background="#5FC0E6")
             agendar_checkbox.place(x=100, y=240)
             
             def atualiza_tela(valor):
@@ -250,11 +255,11 @@ class AutocashApp:
             label.place(x=0, y=0, relwidth=1, relheight=1)
             cliente = self.db.get(doc_id=cliente_id)
 
-            label_cliente = tk.Label(self.janela, text='Olá, ' + cliente["nome"] + ".", font=('normal', 10), justify="left", bg="#50c7e2").place(x=120, y=50)
+            label_cabecalho = tk.Label(self.janela, text='Olá, ' + cliente["nome"] + ".", font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=50)
 
             opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
 
-            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#50c7e2").place(x=90, y=90)
+            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#5FC0E6").place(x=70, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text='2', width=2, command=lambda: abrir_saque(cliente_id)).place(x=166, y=404)
@@ -275,7 +280,7 @@ class AutocashApp:
         while True:
             opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  1 - Fazer login\n  2 - Realizar cadastro'
 
-            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("normal", 14), justify="left", bg="#50c7e2", wraplength=300).place(x=80, y=90)
+            label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("normal", 14), justify="left", bg="#5FC0E6", wraplength=300).place(x=80, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2, command=realizar_cadastro).place(x=166, y=404)
