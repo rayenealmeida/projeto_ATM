@@ -126,7 +126,9 @@ class Transacoes:
             return False
 
 
-    def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False):
+    def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False, pagar=False):
+        if pagar:
+            self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
         if agendar:
             self.registrar_transacao('agendamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
         else:

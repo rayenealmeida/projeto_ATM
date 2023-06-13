@@ -1,8 +1,8 @@
 import os, subprocess, tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
 from PIL import ImageTk, Image
-from tinydb import TinyDB, where
+from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
 import json
 
@@ -330,7 +330,7 @@ class AutocashApp:
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
         # INÍCIO DA FUNÇÃO PAGAMENTO
-        def realizar_pagamento(cliente_id):
+        def realizar_pagamento():
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
             label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -338,18 +338,62 @@ class AutocashApp:
             nova_imagem = ImageTk.PhotoImage(nova_imagem)
             label.config(image=nova_imagem)
             label.image = nova_imagem
-            cliente = self.db.get(doc_id = cliente_id)
-
-            def atualiza_tela(valor):
-                imagem = Image.open(self.diretorio_atual + "/images/atm_bg_dinheiro.png")
-                nova_imagem = ImageTk.PhotoImage(imagem)
-                label.configure(image=nova_imagem)
-                label.image = nova_imagem
-                valor_entry.config(state="disabled")
-                button_enter.config(state="disabled")
-                
+            
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
             
+            def verificar_conta(conta):
+                db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')            
+                Conta = Query()
+                resultado = db.search(Conta['_default'][conta].exists())
+                if resultado:
+                    return True
+                else: 
+                    return False
+            
+            def obter_saldo(conta):
+                db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')
+                Conta =Query()
+                    
+                resultado =  db.search(Conta['_default'][conta].exists())
+                if resultado:
+                    saldo = resultado[0]['_default'][conta]['saldo']
+                    return saldo
+                else:
+                    return None
+                
+            def atualizar_saldo(conta, novo_saldo):
+                db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')
+                Conta = Query()
+                
+                db.update({'saldo': novo_saldo}, Conta['_default'][conta].exists())
+
+            
+            def pagamento():
+                conta_origem = conta_origem_entry.get()
+                conta_destino = conta_destino_entry.get()
+                valor_pagamento = float(valor_entry.get())
+
+                origem_existe = verificar_conta(conta_origem)
+                destino_existe = verificar_conta(conta_destino)
+
+                if origem_existe and destino_existe:
+                    saldo_origem = obter_saldo(conta_origem)
+
+                    if saldo_origem >= valor_pagamento:
+                        novo_saldo_origem = saldo_origem - valor_pagamento
+                        novo_saldo_destino = obter_saldo(conta_destino) + valor_pagamento
+                        atualizar_saldo(conta_origem, novo_saldo_origem)
+                        atualizar_saldo(conta_destino, novo_saldo_destino)
+                        messagebox.showinfo("Pagamento realizado", "O pagamento foi efetuado com sucesso.")
+
+                        conta_origem_entry.delete(0, "end")
+                        conta_destino_entry.delete(0, "end")
+                        valor_entry.delete(0, "end")
+                    else:
+                        messagebox.showerror("Erro", "A conta de origem não possui saldo suficiente.")
+                else:
+                    messagebox.showerror("Erro", "Pelo menos uma das contas informadas não existe.")
+
             conta_origem_label = tk.Label(self.janela, text="CPF/CNPJ da conta de origem:", background="#5FC0E6")
             conta_origem_label.place(x=100, y=90)
             conta_origem_entry = tk.Entry(self.janela)
@@ -381,7 +425,7 @@ class AutocashApp:
             button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
             button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
-            button_enter = tk.Button(self.janela, text='Enter', command=realizar_pagamento)
+            button_enter = tk.Button(self.janela, text='Enter', command=pagamento)
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
