@@ -36,6 +36,7 @@ class Transacoes:
         self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
         caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
         self.db = TinyDB(caminho_banco_dados)
+        
     
     def verificar_debitos(self, cliente):
         data_atual = datetime.now().date()
@@ -50,7 +51,7 @@ class Transacoes:
         data_atual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         # Recupera as transações existentes do banco de dados e cria uma nova transação
-        transacoes = self.db.get(doc_id=conta_origem)['transacoes'] 
+        transacoes = self.db.get(doc_id=conta_origem)['transacoes']
         nova_transacao = {
             'data': data_atual,
             'tipo': tipo,
@@ -59,22 +60,43 @@ class Transacoes:
             'conta_destino': conta_destino
         }
         
-        # Verifica se transacoes é uma lista e add a nova transação à lista
+        # Verifica se transacoes é uma lista e adiciona a nova transação à lista
         if isinstance(transacoes, list):
             transacoes.append(nova_transacao)
         else:
-            # Converte a string em uma lista vazia e add a nova transação
+            # Converte a string em uma lista vazia e adiciona a nova transação
             transacoes = json.loads(transacoes) if transacoes else []
             transacoes.append(nova_transacao)
-        # Converte em string
+        # Converte em string JSON
         transacoes_str = json.dumps(transacoes)
         # Atualiza o valor no banco de dados
-        self.db.update({'transacoes': transacoes}, doc_ids=[conta_origem])
+        self.db.update({'transacoes': transacoes_str}, doc_ids=[conta_origem])
 
 
-    def extrato(self, conta):
-        return self.db.search((Query().conta_origem == conta) | (Query().conta_destino == conta))
 
+    def extrato(self, cliente_id):
+        cliente = self.db.get(doc_id=cliente_id)
+        transacoes_extrato = []
+
+        if cliente and 'transacoes' in cliente:
+            transacoes = json.loads(cliente['transacoes'])
+            for transacao in transacoes:
+                data = transacao['data']
+                tipo = transacao['tipo']
+                valor = transacao['valor']
+                conta_origem = transacao['conta_origem']
+                conta_destino = transacao['conta_destino']
+
+                if conta_destino is None:
+                    extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n---------------------"
+                    transacoes_extrato.append(extrato_str)
+                else:
+                    cliente_destino = self.db.get(doc_id=conta_destino)
+                    extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n" + "Transferido para: " + cliente_destino['nome'] + "\n---------------------"
+                    transacoes_extrato.append(extrato_str)
+
+        return transacoes_extrato
+    
     # SAQUE OK #
     def saque(self, conta, valor):
         cliente = self.db.get(doc_id=conta)

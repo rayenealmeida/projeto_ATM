@@ -13,7 +13,7 @@ class AutocashApp:
 
         self.janela = tk.Tk()
         self.janela.geometry("600x600")
-        self.janela.title("Menu")
+        self.janela.title("Caixa Eletrônico")
         self.janela.resizable(False, False)
 
         imagem = Image.open(self.diretorio_atual + "/images/atm_bg.png")
@@ -187,7 +187,87 @@ class AutocashApp:
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
-        # FUNÇÃO DEPOSITO> OK #
+        # FUNÇÃO EXTRATO #
+        def abrir_extrato(cliente_id):
+            imagem_tk = ImageTk.PhotoImage(imagem)
+            label = tk.Label(self.janela, image=imagem_tk)
+            label.place(x=0, y=0, relwidth=1, relheight=1)
+            nova_imagem = Image.open(self.diretorio_atual + "/images/atm_bg.png")
+            nova_imagem = ImageTk.PhotoImage(nova_imagem)
+            label.config(image=nova_imagem)
+            label.image = nova_imagem
+            cliente = self.db.get(doc_id=cliente_id)
+
+            def atualiza_tela():
+                imagem = Image.open(self.diretorio_atual + "/images/atm_bg_extrato.png")
+                nova_imagem = ImageTk.PhotoImage(imagem)
+                label.configure(image=nova_imagem)
+                label.image = nova_imagem
+                mensagem_label.config(text="Comprovante impreso!", font=('normal', 14))
+                
+            transacoes_extrato = Transacoes()
+
+            mensagem_label = tk.Label(self.janela, text="", background="#5FC0E6", font=('normal', 10), justify="left")
+            mensagem_label.pack()
+            mensagem_label.place(x=120, y=170)
+
+            def extrato(cliente_id):
+                nonlocal cliente
+                cliente = self.db.get(doc_id=cliente_id)
+                transacoes_cliente = transacoes_extrato.extrato(cliente_id)
+                if transacoes_cliente:
+                    atualiza_tela()
+                    janela_extrato = tk.Toplevel(self.janela)
+                    janela_extrato.title("Extrato impresso")
+                    janela_extrato.geometry("300x400")
+                    
+                    frame_extrato = tk.Frame(janela_extrato)
+                    frame_extrato.pack(fill=tk.BOTH, expand=True)
+                    
+                    scrollbar = tk.Scrollbar(frame_extrato)
+                    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+                    
+                    # Cria um widget Canvas para o frame do extrato
+                    canvas = tk.Canvas(frame_extrato, yscrollcommand=scrollbar.set)
+                    canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+                    
+                    # Associa a barra de rolagem ao canvas
+                    scrollbar.config(command=canvas.yview)
+                    
+                    # Cria um frame interno para as transações
+                    inner_frame = tk.Frame(canvas)
+                    canvas.create_window((0, 0), window=inner_frame, anchor=tk.NW)
+                    
+                    for i, transacao in enumerate(transacoes_cliente):
+                        label_transacao = tk.Label(inner_frame, text=transacao, font=('normal', 10), justify="left")
+                        label_transacao.pack(anchor=tk.W)
+                    
+                    # Atualiza o tamanho do canvas
+                    canvas.update_idletasks()
+                    canvas.config(scrollregion=canvas.bbox(tk.ALL))
+                    
+                else:
+                    mensagem_label.config(text="Não há transações para exibir.")
+
+            label_cabecalho = tk.Label(self.janela, text=cliente["nome"].split()[0] + ", tecle enter para gerar o seu extrato.\nSeu saldo atual é: R$ " + str(cliente['saldo']), font=('normal', 12), justify="center", bg="#5FC0E6").place(x=60, y=120)
+            label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=340)
+
+            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
+            button_2 = tk.Button(self.janela, text='2', width=2).place(x=166, y=404)
+            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
+            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
+            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
+            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
+            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
+            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
+            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
+            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            button_enter = tk.Button(self.janela, text='Enter', command=lambda: extrato(cliente_id))
+            button_enter.place(x=285, y=513)
+            button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
+            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
+
+        # FUNÇÃO DEPÓSITO> OK #
         def abrir_deposito(cliente_id):
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
@@ -318,7 +398,7 @@ class AutocashApp:
 
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#5FC0E6").place(x=70, y=90)
 
-            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
+            button_1 = tk.Button(self.janela, text= '1', width=2, command=lambda: abrir_extrato(cliente_id)).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text='2', width=2, command=lambda: abrir_saque(cliente_id)).place(x=166, y=404)
             button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_deposito(cliente_id)).place(x=219, y=404)
             button_4 = tk.Button(self.janela, text= '4', width=2, command= realizar_pagamento).place(x=113, y=440)
@@ -341,7 +421,7 @@ class AutocashApp:
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2, command=realizar_cadastro).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_saque(2)).place(x=219, y=404)
+            button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_menu(2)).place(x=219, y=404)
             button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
             button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
             button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
