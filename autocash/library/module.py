@@ -126,18 +126,16 @@ class Transacoes:
             return False
 
 
-    def realizar_pagamento(self, conta_origem, conta_destino, valor, agendar=False, pagar=False):
-        if pagar:
-            self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
-        if agendar:
-            self.registrar_transacao('agendamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
-        else:
-            saldo = self.calcular_saldo(conta_origem)
-            if saldo >= valor:
-                self.registrar_transacao('pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
-                return True
-            else:
-                return False
+    def realizar_pagamento(self, conta_origem, conta_destino, valor):
+        # if pagar:
+        #     self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+        # if agendar:
+        #     self.registrar_transacao('agendamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+        # else:
+        #     saldo = self.calcular_saldo(conta_origem)
+        #     if saldo >= valor:
+        #         self.registrar_transacao('pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+        return True
             
 class Cliente:
     def __init__(self, cpf, nome, telefone, endereco, data_nascimento, renda):

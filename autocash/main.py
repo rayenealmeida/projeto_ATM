@@ -342,31 +342,23 @@ class AutocashApp:
             
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
 
-            
             def pagamento(cliente_id):
+                print(cliente_id)
                 cpf = conta_destino_entry.get()
+                valor = valor_entry.get()
+                print(cpf)
                 
                 for indice, destinatario in enumerate(self.db.all()):
                     if destinatario['cpf'] == cpf:
                         destinatario_id = indice+1
+                        print(destinatario_id)
                         destinatario = self.db.get(doc_id=destinatario_id)
-                        return True
-                    else:
-                        return False
-                
-                cliente = self.db.get(doc_id=cliente_id)
-                saldo_origem = cliente['saldo']
-                saldo_destino = destinatario['saldo']
-                print(destinatario)
-                conta_origem = conta_origem_entry.get()
-                valor_pagamento = float(valor_entry.get())
-
-    
-           
-            conta_origem_label = tk.Label(self.janela, text="CPF/CNPJ da conta de origem:", background="#5FC0E6")
-            conta_origem_label.place(x=100, y=90)
-            conta_origem_entry = tk.Entry(self.janela)
-            conta_origem_entry.place(x=100, y=110)
+                        print(destinatario)
+                        transacao = Transacoes()
+                        if transacao.realizar_pagamento(cliente_id, destinatario_id, valor):
+                            print("Deu certo")
+                        else:
+                            print("Não deu certo :(")
 
             conta_destino_label = tk.Label(self.janela, text="CPF/CNPJ da conta de destino:", background="#5FC0E6")
             conta_destino_label.pack()
@@ -377,12 +369,7 @@ class AutocashApp:
             valor_label = tk.Label(self.janela, text="Valor do pagamento:", background="#5FC0E6")
             valor_label.place(x=100, y=190)
             valor_entry = tk.Entry(self.janela)
-            valor_entry.place(x=100, y=210)
-            
-            agendar_var = tk.IntVar()
-            agendar_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_var, background="#5FC0E6")
-            agendar_checkbox.place(x=100, y=240)
-            
+            valor_entry.place(x=100, y=210)            
             
             button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text='2', width=2).place(x=166, y=404)
