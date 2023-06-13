@@ -104,7 +104,7 @@ class Transacoes:
             novo_saldo = saldo - valor
             novo_saldo = round(novo_saldo, 2)
             # print(novo_saldo, saldo, valor)
-            self.registrar_transacao('saque', valor, conta_origem=conta)
+            self.registrar_transacao('Saque', valor, conta_origem=conta)
             self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
             return True
         else:
@@ -119,7 +119,7 @@ class Transacoes:
             novo_saldo = saldo + valor
             novo_saldo = round(novo_saldo, 2)
             # print(novo_saldo, saldo, valor)
-            self.registrar_transacao('deposito', valor, conta_origem=conta)
+            self.registrar_transacao('Depósito', valor, conta_origem=conta)
             self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
             return True
         else:
