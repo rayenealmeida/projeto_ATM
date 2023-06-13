@@ -203,7 +203,7 @@ class AutocashApp:
                 nova_imagem = ImageTk.PhotoImage(imagem)
                 label.configure(image=nova_imagem)
                 label.image = nova_imagem
-                mensagem_label.config(text="Comprovante impreso!", font=('normal', 14))
+                mensagem_label.config(text="Comprovante impresso!", font=('normal', 14))
                 
             transacoes_extrato = Transacoes()
 
