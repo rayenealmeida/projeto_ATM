@@ -341,15 +341,6 @@ class AutocashApp:
             
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
             
-            def verificar_conta(conta):
-                db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')            
-                Conta = Query()
-                resultado = db.search(Conta['_default'][conta].exists())
-                if resultado:
-                    return True
-                else: 
-                    return False
-            
             def obter_saldo(conta):
                 db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')
                 Conta =Query()
@@ -368,32 +359,39 @@ class AutocashApp:
                 db.update({'saldo': novo_saldo}, Conta['_default'][conta].exists())
 
             
-            def pagamento():
+            def pagamento(cliente_id):
+                cpf = conta_destino_entry.get()
+                
+                for indice, destinatario in enumerate(self.db.all()):
+                    if destinatario['cpf'] == cpf:
+                        destinatario_id = indice+1
+                        destinatario = self.db.get(doc_id=destinatario_id)
+                        return True
+                    else:
+                        return False
+                
+                cliente = self.db.get(doc_id=cliente_id)
+                saldo_origem = cliente['saldo']
+                saldo_destino = destinatario['saldo']
+                print(destinatario)
                 conta_origem = conta_origem_entry.get()
                 conta_destino = conta_destino_entry.get()
                 valor_pagamento = float(valor_entry.get())
 
-                origem_existe = verificar_conta(conta_origem)
-                destino_existe = verificar_conta(conta_destino)
+            
+                if saldo_origem >= valor_pagamento:
+                    novo_saldo_origem = saldo_origem - valor_pagamento
+                    novo_saldo_destino = obter_saldo(conta_destino) + valor_pagamento
+                    atualizar_saldo(conta_origem, novo_saldo_origem)
+                    atualizar_saldo(conta_destino, novo_saldo_destino)
+                    messagebox.showinfo("Pagamento realizado", "O pagamento foi efetuado com sucesso.")
 
-                if origem_existe and destino_existe:
-                    saldo_origem = obter_saldo(conta_origem)
-
-                    if saldo_origem >= valor_pagamento:
-                        novo_saldo_origem = saldo_origem - valor_pagamento
-                        novo_saldo_destino = obter_saldo(conta_destino) + valor_pagamento
-                        atualizar_saldo(conta_origem, novo_saldo_origem)
-                        atualizar_saldo(conta_destino, novo_saldo_destino)
-                        messagebox.showinfo("Pagamento realizado", "O pagamento foi efetuado com sucesso.")
-
-                        conta_origem_entry.delete(0, "end")
-                        conta_destino_entry.delete(0, "end")
-                        valor_entry.delete(0, "end")
-                    else:
-                        messagebox.showerror("Erro", "A conta de origem não possui saldo suficiente.")
+                    conta_origem_entry.delete(0, "end")
+                    conta_destino_entry.delete(0, "end")
+                    valor_entry.delete(0, "end")
                 else:
-                    messagebox.showerror("Erro", "Pelo menos uma das contas informadas não existe.")
-
+                        messagebox.showerror("Erro", "A conta de origem não possui saldo suficiente.")
+           
             conta_origem_label = tk.Label(self.janela, text="CPF/CNPJ da conta de origem:", background="#5FC0E6")
             conta_origem_label.place(x=100, y=90)
             conta_origem_entry = tk.Entry(self.janela)
