@@ -338,9 +338,23 @@ class AutocashApp:
             nova_imagem = ImageTk.PhotoImage(nova_imagem)
             label.config(image=nova_imagem)
             label.image = nova_imagem
+            cliente = self.db.get(doc_id=cliente_id)
             
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
             
+<<<<<<< HEAD
+=======
+            def verificar_conta(conta):
+                db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')            
+                Conta = Query()
+                resultado = db.search(Conta['_default'][conta].exists())
+                print(resultado)
+                if resultado:
+                    return True
+                else: 
+                    return False
+            
+>>>>>>> a07db5cdd9a1500ce046a26a29baa9f956a575b3
             def obter_saldo(conta):
                 db = TinyDB(self.diretorio_atual + '/banco_de_dados.json')
                 Conta =Query()
