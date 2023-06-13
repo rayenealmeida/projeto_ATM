@@ -47,6 +47,7 @@ class Transacoes:
                 valor_parcela = debito['valor'] / cliente.qtd_parcelas
                 self.registrar_transacao('retirada', valor_parcela, conta_origem=cliente.numero_conta)
 
+    # RESGISTRAR TRANSAÇÕES: APARENTEMENTE OK #
     def registrar_transacao(self, tipo, valor, conta_origem=None, conta_destino=None):
         data_atual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -64,16 +65,13 @@ class Transacoes:
         if isinstance(transacoes, list):
             transacoes.append(nova_transacao)
         else:
-            # Converte a string em uma lista vazia e adiciona a nova transação
             transacoes = json.loads(transacoes) if transacoes else []
             transacoes.append(nova_transacao)
-        # Converte em string JSON
         transacoes_str = json.dumps(transacoes)
-        # Atualiza o valor no banco de dados
         self.db.update({'transacoes': transacoes_str}, doc_ids=[conta_origem])
 
 
-
+    # EXTRATO: OK #
     def extrato(self, cliente_id):
         cliente = self.db.get(doc_id=cliente_id)
         transacoes_extrato = []
@@ -97,7 +95,7 @@ class Transacoes:
 
         return transacoes_extrato
     
-    # SAQUE OK #
+    # SAQUE: OK #
     def saque(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
@@ -112,7 +110,7 @@ class Transacoes:
         else:
             return False
 
-    # DEPOSITO OK #
+    # DEPOSITO: OK #
     def deposito(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
