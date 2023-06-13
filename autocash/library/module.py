@@ -127,6 +127,23 @@ class Transacoes:
 
 
     def realizar_pagamento(self, conta_origem, conta_destino, valor):
+        cliente_origem = self.db.get(doc_id=conta_origem)
+        cliente_destino = self.db.get(doc_id=conta_destino)
+        
+        saldo_origem = cliente_origem['saldo']
+        saldo_destino = cliente_destino['saldo']
+        
+        if saldo_origem >= valor:
+            novo_saldo_origem = saldo_origem - valor
+            novo_saldo_destino = saldo_destino + valor
+            
+            self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+            self.db.update({'saldo': novo_saldo_origem}, doc_ids=[conta_origem])
+            self.db.update({'saldo': novo_saldo_destino}, doc_ids=[conta_destino])
+            
+            return True
+        else:
+            return False
         # if pagar:
         #     self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
         # if agendar:
@@ -135,7 +152,6 @@ class Transacoes:
         #     saldo = self.calcular_saldo(conta_origem)
         #     if saldo >= valor:
         #         self.registrar_transacao('pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
-        return True
             
 class Cliente:
     def __init__(self, cpf, nome, telefone, endereco, data_nascimento, renda):
