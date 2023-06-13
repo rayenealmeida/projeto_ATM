@@ -330,7 +330,7 @@ class AutocashApp:
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
 
         # INÍCIO DA FUNÇÃO PAGAMENTO
-        def realizar_pagamento():
+        def realizar_pagamento(cliente_id):
             imagem_tk = ImageTk.PhotoImage(imagem)
             label = tk.Label(self.janela, image=imagem_tk)
             label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -446,7 +446,7 @@ class AutocashApp:
             button_1 = tk.Button(self.janela, text= '1', width=2, command=lambda: abrir_extrato(cliente_id)).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text='2', width=2, command=lambda: abrir_saque(cliente_id)).place(x=166, y=404)
             button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_deposito(cliente_id)).place(x=219, y=404)
-            button_4 = tk.Button(self.janela, text= '4', width=2, command= realizar_pagamento).place(x=113, y=440)
+            button_4 = tk.Button(self.janela, text= '4', width=2, command=lambda: realizar_pagamento(cliente_id)).place(x=113, y=440)
             button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
             button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
             button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
