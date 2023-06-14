@@ -1,6 +1,6 @@
 import os, subprocess, tkinter as tk
 from tkinter import ttk, messagebox
-from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
+from library.module import Gerente, Conta, Transacoes
 from PIL import ImageTk, Image
 from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox

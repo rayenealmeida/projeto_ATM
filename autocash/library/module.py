@@ -1,4 +1,5 @@
 from datetime import datetime
+import os, subprocess, tkinter as tk
 import os
 import json
 from tinydb import TinyDB, Query
@@ -16,12 +17,6 @@ class Conta:
     #     self.db.remove((Query().cpf == cliente.cpf) & (Query().conta == cliente.numero_conta))
 
 class Gerente:
-    def aprovar_conta(self, cliente):
-        if cliente.renda >= 450:
-            return True
-        else:
-            return False
-
     def aprovar_credito(self, cliente):
         if cliente.renda * 5 <= cliente.valor_solicitado:
             return True
@@ -148,18 +143,40 @@ class Transacoes:
         else:
             return False
     
-class Cliente:
-    def __init__(self, cpf, nome, telefone, endereco, data_nascimento, renda):
-        self.cpf = cpf
-        self.nome = nome
-        self.telefone = telefone
-        self.endereco = endereco
-        self.data_nascimento = data_nascimento
-        self.renda = renda
-    
-    def solicita_aprovacao(self, gerente):
-        resultado = gerente.aprovar_conta(self)
-        return resultado
+class CadastroCliente:
+    def __init__(self):
+        self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
+        caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
+        self.db = TinyDB(caminho_banco_dados)
+
+
+    def salvar_cadastro(self, nome, telefone, data_nascimento, cpf_ou_cnpj, endereco, renda, senha):
+        data_atual = datetime.now().date()
+        data_nascimento_check = datetime.strptime(data_nascimento, "%d/%m/%Y").date()
+        idade = data_atual.year - data_nascimento_check.year
+
+        if (data_atual.month, data_atual.day) < (data_nascimento_check.month, data_nascimento_check.day):
+            idade -= 1
+        if idade < 18:
+            return False
+        else:
+            # Salvar os dados no banco de dados
+            self.db.insert({
+                'cadastro_nivel': 1,
+                'nome': nome,
+                'telefone': telefone,
+                'data_nascimento': data_nascimento,
+                'cpf': cpf_ou_cnpj,
+                'endereco': endereco,
+                'renda': renda,
+                'senha': senha,
+                'transacoes': '',
+                'saldo': 0,
+                'solicita_credito': 0,
+                'valor_solicitado': 0,
+                'dia_para_cobranca': '',
+            })
+            return True
     
 class SolicitaCredito:
     def __init__(self, valor_solicitado, renda, qtd_parcelas):
