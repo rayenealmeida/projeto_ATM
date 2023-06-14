@@ -344,23 +344,19 @@ class AutocashApp:
 
             label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
 
-            # def atualizar_tela():
-            #     nonlocal cliente
-            #     cliente = self.db.get(doc_id=cliente_id)
-            #     label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR DEPÓSITO:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
-
             def pagamento(cliente_id):
-                #print(cliente_id)
                 cpf = conta_destino_entry.get()
                 valor = float(valor_entry.get())
-                #print(cpf)
+                
+                if valor == 0:
+                    mensagem_label = tk.Label(self.janela, text='Valor inválido', background="#5FC0E6")
+                    mensagem_label.place(x=100, y=250)
+                    return False
                 
                 for indice, destinatario in enumerate(self.db.all()):
                     if destinatario['cpf'] == cpf:
                         destinatario_id = indice+1
-                        #print(destinatario_id)
                         destinatario = self.db.get(doc_id=destinatario_id)
-                        #print(destinatario)
                         transacao = Transacoes()
                         if transacao.realizar_pagamento(cliente_id, destinatario_id, valor):
                             mensagem_label = tk.Label(self.janela, text='Pagamento realizado com sucesso', background="#5FC0E6")
