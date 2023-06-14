@@ -100,7 +100,7 @@ class Transacoes:
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
 
-        if saldo >= valor and valor > 0:
+        if saldo >= valor and valor != 0:
             novo_saldo = saldo - valor
             novo_saldo = round(novo_saldo, 2)
             # print(novo_saldo, saldo, valor)
@@ -125,25 +125,29 @@ class Transacoes:
         else:
             return False
 
+
     def realizar_pagamento(self, conta_origem, conta_destino, valor):
-        cliente_origem = self.db.get(doc_id=conta_origem)
-        cliente_destino = self.db.get(doc_id=conta_destino)
-        
-        saldo_origem = cliente_origem['saldo']
-        saldo_destino = cliente_destino['saldo']
-        
-        if saldo_origem >= valor:
-            novo_saldo_origem = saldo_origem - valor
-            novo_saldo_destino = saldo_destino + valor
+        if valor > 0: 
+            cliente_origem = self.db.get(doc_id=conta_origem)
+            cliente_destino = self.db.get(doc_id=conta_destino)
             
-            self.registrar_transacao('Transferência', valor, conta_origem=conta_origem, conta_destino=conta_destino)
-            self.db.update({'saldo': novo_saldo_origem}, doc_ids=[conta_origem])
-            self.db.update({'saldo': novo_saldo_destino}, doc_ids=[conta_destino])
-            
-            return True
+            saldo_origem = cliente_origem['saldo']
+            saldo_destino = cliente_destino['saldo']
+        
+            if saldo_origem >= valor:
+                novo_saldo_origem = saldo_origem - valor
+                novo_saldo_destino = saldo_destino + valor
+                
+                self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+                self.db.update({'saldo': novo_saldo_origem}, doc_ids=[conta_origem])
+                self.db.update({'saldo': novo_saldo_destino}, doc_ids=[conta_destino])
+                self.registrar_transacao('Pagamento Recebido', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+                return True
+            else:
+                return False
         else:
             return False
-            
+    
 class Cliente:
     def __init__(self, cpf, nome, telefone, endereco, data_nascimento, renda):
         self.cpf = cpf
