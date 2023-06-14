@@ -342,6 +342,13 @@ class AutocashApp:
             
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
 
+            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
+
+            # def atualizar_tela():
+            #     nonlocal cliente
+            #     cliente = self.db.get(doc_id=cliente_id)
+            #     label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR DEPÓSITO:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
+
             def pagamento(cliente_id):
                 #print(cliente_id)
                 cpf = conta_destino_entry.get()
@@ -356,13 +363,16 @@ class AutocashApp:
                         #print(destinatario)
                         transacao = Transacoes()
                         if transacao.realizar_pagamento(cliente_id, destinatario_id, valor):
-                            mensagem_label = tk.Label(self.janela, text='Pagamento realizado com Sucesso', background="#5FC0E6")
+                            mensagem_label = tk.Label(self.janela, text='Pagamento realizado com sucesso', background="#5FC0E6")
                             mensagem_label.place(x=100, y=250)
+                            cliente = self.db.get(doc_id=cliente_id)
+                            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
                             return True
                         else:
                             mensagem_label = tk.Label(self.janela, text='ERRO! Transação não realizada',background="#5FC0E6")
                             mensagem_label.place(x=100, y=250)
                             return False
+                
             
             conta_destino_label = tk.Label(self.janela, text="CPF/CNPJ da conta de destino:", background="#5FC0E6")
             conta_destino_label.pack()
