@@ -3,6 +3,7 @@ import os, subprocess, tkinter as tk
 import os
 import json
 from tinydb import TinyDB, Query
+from datetime import datetime
 
 class Conta:
     def __init__(self):
@@ -121,8 +122,8 @@ class Transacoes:
             return False
 
 
-    def realizar_pagamento(self, conta_origem, conta_destino, valor):
-        if valor > 0: 
+    def realizar_pagamento(self, conta_origem, conta_destino, valor, data_agendamento=None, hora_agendamento=None):
+        if valor >= 0 and conta_origem != conta_destino: 
             cliente_origem = self.db.get(doc_id=conta_origem)
             cliente_destino = self.db.get(doc_id=conta_destino)
             
@@ -136,7 +137,12 @@ class Transacoes:
                 self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
                 self.db.update({'saldo': novo_saldo_origem}, doc_ids=[conta_origem])
                 self.db.update({'saldo': novo_saldo_destino}, doc_ids=[conta_destino])
+                
+                if data_agendamento and hora_agendamento:
+                    data_hora_agendamento = datetime.strptime(f"{data_agendamento} {hora_agendamento}", "%d-%m-%Y %H:%M")
+                
                 self.registrar_transacao('Pagamento Recebido', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+
                 return True
             else:
                 return False
