@@ -4,7 +4,7 @@ from library.module import Gerente, Conta, Transacoes, Cliente, SolicitaCredito
 from PIL import ImageTk, Image
 from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
-import json
+from datetime import datetime
 
 class AutocashApp:
     def __init__(self):
@@ -350,6 +350,9 @@ class AutocashApp:
                 valor_str = valor_str.replace(',','.')
                 valor = float(valor_str)
                 
+                data_agendamento = data_agendamento_entry,get()
+                hora_agendamento = hora_agendamento_entry.get()
+                
                 if valor <= 0:
                     mensagem_label = tk.Label(self.janela, text='Valor inválido', background="#5FC0E6")
                     mensagem_label.place(x=100, y=250)
@@ -360,7 +363,8 @@ class AutocashApp:
                         destinatario_id = indice+1
                         destinatario = self.db.get(doc_id=destinatario_id)
                         transacao = Transacoes()
-                        if transacao.realizar_pagamento(cliente_id, destinatario_id, valor):
+                        
+                        if transacao.realizar_pagamento(cliente_id, destinatario_id, valor, data_agendamento, hora_agendamento):
                             mensagem_label = tk.Label(self.janela, text='Pagamento realizado com sucesso', background="#5FC0E6")
                             mensagem_label.place(x=100, y=250)
                             cliente = self.db.get(doc_id=cliente_id)
@@ -371,6 +375,15 @@ class AutocashApp:
                             mensagem_label.place(x=100, y=250)
                             return False
                 
+            data_agendamento_label = tk.Label(self.janela, text ="Data de agendamento", background="#5FC0E6")
+            data_agendamento_label.place(x=100, y=240)
+            data_agendamento_entry = tk.Entry(self.janela)
+            data_agendamento_entry.place(x=100, y=260)
+            
+            hora_agendamento_label = tk.Label(self.janela, text="Hora do agendamento:", background="#5FC0E6")
+            hora_agendamento_label.place(x=100, y=290)
+            hora_agendamento_entry = tk.Entry(self.janela)
+            hora_agendamento_entry.place(x=100, y=310)
             
             conta_destino_label = tk.Label(self.janela, text="CPF/CNPJ da conta de destino:", background="#5FC0E6")
             conta_destino_label.pack()
