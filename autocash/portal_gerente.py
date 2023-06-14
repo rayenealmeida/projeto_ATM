@@ -119,7 +119,7 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
                     exibir_janela_reprovacao()
             except ValueError:
                 import tkinter.messagebox as messagebox
-                messagebox.showerror("Erro", "O campo Renda deve ser um valor numérico.")
+                messagebox.showerror("Erro", "Verifique se completou todos os campos corretamente.")
         else:
             import tkinter.messagebox as messagebox
             messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
