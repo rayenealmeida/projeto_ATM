@@ -24,40 +24,6 @@ class AutocashApp:
         #         INÍCIO DAS FUNÇÕES         #
         ######################################
 
-        # ÍNCIO DO PAINEL GERNRE #
-        def abrir_painel_gerente(cliente_id):
-            imagem_tk = ImageTk.PhotoImage(imagem)
-            label = tk.Label(self.janela, image=imagem_tk)
-            label.place(x=0, y=0, relwidth=1, relheight=1)
-
-            def carregar_imagem():
-                imagem_original = Image.open(self.diretorio_atual + "/images/atm_bg.png")
-                nova_imagem = imagem_original.resize((600, 600))
-                nova_imagem = ImageTk.PhotoImage(nova_imagem)
-                label.config(image=nova_imagem)
-                label.image = nova_imagem    
-            carregar_imagem()
-
-            gerente = self.db.get(doc_id=cliente_id)
-            label_gerenre = tk.Label(self.janela, text='Olá, ' + gerente["nome"] + ".", font=('normal', 10), justify="left", bg="#5FC0E6").place(x=120, y=50)
-
-            # Criando a barra de rolagem
-            scrollbar = ttk.Scrollbar(self.janela, orient=tk.VERTICAL)
-            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-            # Criando a Listbox
-            listbox = tk.Listbox(self.janela, yscrollcommand=scrollbar.set)
-            listbox.pack(fill=tk.BOTH, expand=True)
-
-            # Adicionando itens à Listbox
-            for i in range(50):
-                listbox.insert(tk.END, f"Item {i+1}")
-            
-            listbox.place(x=70, y=80, width=300, height=150)
-
-            print('GERENTE ON!')
-
-
         # INÍCIO DA FUNÇÃO REALIZAR CADASTRO: OK #
         def realizar_cadastro():
             subprocess.run(['python', self.diretorio_atual +'/cadastro.py'])
@@ -86,10 +52,7 @@ class AutocashApp:
                         label_cliente['bg'] = '#5FC0E6'
                         cliente_id = indice+1
                         usuario = self.db.get(doc_id=cliente_id)
-                        if usuario['cadastro_nivel'] == 2: 
-                            abrir_painel_gerente(cliente_id)
-                        else: 
-                            abrir_menu(cliente_id)                   
+                        abrir_menu(cliente_id)                   
                     else:
                         label_cliente['text'] = 'CPF ou senha inválidos!'
                         label_cliente['bg'] = '#5FC0E6'
