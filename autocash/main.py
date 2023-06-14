@@ -343,23 +343,27 @@ class AutocashApp:
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
 
             def pagamento(cliente_id):
-                print(cliente_id)
+                #print(cliente_id)
                 cpf = conta_destino_entry.get()
-                valor = valor_entry.get()
-                print(cpf)
+                valor = float(valor_entry.get())
+                #print(cpf)
                 
                 for indice, destinatario in enumerate(self.db.all()):
                     if destinatario['cpf'] == cpf:
                         destinatario_id = indice+1
-                        print(destinatario_id)
+                        #print(destinatario_id)
                         destinatario = self.db.get(doc_id=destinatario_id)
-                        print(destinatario)
+                        #print(destinatario)
                         transacao = Transacoes()
                         if transacao.realizar_pagamento(cliente_id, destinatario_id, valor):
-                            print("Deu certo")
+                            mensagem_label = tk.Label(self.janela, text='Pagamento realizado com Sucesso', background="#5FC0E6")
+                            mensagem_label.place(x=100, y=250)
+                            return True
                         else:
-                            print("Não deu certo :(")
-
+                            mensagem_label = tk.Label(self.janela, text='ERRO! Transação não realizada',background="#5FC0E6")
+                            mensagem_label.place(x=100, y=250)
+                            return False
+            
             conta_destino_label = tk.Label(self.janela, text="CPF/CNPJ da conta de destino:", background="#5FC0E6")
             conta_destino_label.pack()
             conta_destino_label.place(x=100, y=140)
