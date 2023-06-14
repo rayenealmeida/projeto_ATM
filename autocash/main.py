@@ -341,14 +341,16 @@ class AutocashApp:
             cliente = self.db.get(doc_id=cliente_id)
             
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
-
             label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=120, y=50)
 
             def pagamento(cliente_id):
                 cpf = conta_destino_entry.get()
                 valor = float(valor_entry.get())
+                valor_str = valor_entry.get()
+                valor_str = valor_str.replace(',','.')
+                valor = float(valor_str)
                 
-                if valor == 0:
+                if valor <= 0:
                     mensagem_label = tk.Label(self.janela, text='Valor inválido', background="#5FC0E6")
                     mensagem_label.place(x=100, y=250)
                     return False

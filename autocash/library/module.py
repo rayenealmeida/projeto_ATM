@@ -127,7 +127,7 @@ class Transacoes:
 
 
     def realizar_pagamento(self, conta_origem, conta_destino, valor):
-        if valor > 0: 
+        if valor >= 0 and conta_origem != conta_destino: 
             cliente_origem = self.db.get(doc_id=conta_origem)
             cliente_destino = self.db.get(doc_id=conta_destino)
             
