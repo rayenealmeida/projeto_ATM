@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from library.module import Gerente, Conta, Transacoes, CadastroCliente, SolicitaCredito
+from library.module import CadastroCliente, SolicitaCredito
 from tkinter import Tk, Label, Entry, Button, Frame, Toplevel
 from tinydb import TinyDB
 import os, subprocess, tkinter as tk

@@ -1,6 +1,6 @@
 import os, subprocess, tkinter as tk
 from tkinter import ttk, messagebox
-from library.module import Gerente, Conta, Transacoes
+from library.module import Transacoes
 from PIL import ImageTk, Image
 from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
@@ -313,7 +313,7 @@ class AutocashApp:
                 valor_str = valor_str.replace(',','.')
                 valor = float(valor_str)
                 
-                data_agendamento = data_agendamento_entry,get()
+                data_agendamento = data_agendamento_entry.get()
                 hora_agendamento = hora_agendamento_entry.get()
                 
                 if valor <= 0:

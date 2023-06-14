@@ -1,31 +1,8 @@
 from datetime import datetime
-import os, subprocess, tkinter as tk
 import os
 import json
 from tinydb import TinyDB, Query
 from datetime import datetime
-
-class Conta:
-    def __init__(self):
-        self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
-        caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
-        self.db = TinyDB(caminho_banco_dados)
-
-    # def criar_conta(self, cliente):
-    #     self.db.insert({'cpf': cliente.cpf, 'nome': cliente.nome, 'conta': cliente.numero_conta})
-
-    # def apagar_conta(self, cliente):
-    #     self.db.remove((Query().cpf == cliente.cpf) & (Query().conta == cliente.numero_conta))
-
-class Gerente:
-    def aprovar_credito(self, cliente):
-        if cliente.renda * 5 <= cliente.valor_solicitado:
-            return True
-        else:
-            return False
-
-    def excluir_conta(self, conta):
-        conta.apagar_conta()
 
 class Transacoes:
     def __init__(self):
