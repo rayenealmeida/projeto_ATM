@@ -6,6 +6,7 @@ from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
 from datetime import datetime
 
+
 class AutocashApp:
     def __init__(self):
         self.diretorio_atual = os.path.dirname(os.path.abspath(__file__))
@@ -475,13 +476,20 @@ class AutocashApp:
 
             self.janela.mainloop()
             
+                
+        def realizar_cadastro():
+            mensagem = "Vá até o banco para que o gerente faça seu cadastro."
+            # Exibe a mensagem em uma caixa de diálogo
+            tk.messagebox.showinfo("Autocash", mensagem)
+    
+            
         while True:
             opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  1 - Fazer login\n  2 - Realizar cadastro'
 
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("normal", 14), justify="left", bg="#5FC0E6", wraplength=300).place(x=80, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)
-            button_2 = tk.Button(self.janela, text= '2', width=2, command=realizar_cadastro).place(x=166, y=404)
+            button_2 = tk.Button(self.janela, text= '2', width=2, command= realizar_cadastro).place(x=166, y=404)
             button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_menu(2)).place(x=219, y=404)
             button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
             button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
