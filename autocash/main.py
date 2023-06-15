@@ -303,11 +303,14 @@ class AutocashApp:
             label.config(image=nova_imagem)
             label.image = nova_imagem
             
+            mensagem_label = tk.Label(self.janela, text="", background="#5FC0E6", font=('normal', 11), justify="left")
+            mensagem_label.pack()
+            mensagem_label.place(x=30, y=200)
 
-            def solicitar():
+            def solicitar(cliente_id):
+                cliente = self.db.get(doc_id=cliente_id)
                 valor = float(entry_valor.get())
                 cliente_id = self.cliente_logado['id']
-                cliente = self.db.get(doc_id=cliente_id)
                 cpf = cliente['cpf']
                 renda = cliente['renda']
                 solicitacao = {
