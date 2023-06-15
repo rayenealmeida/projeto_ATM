@@ -4,6 +4,7 @@ import json
 from tinydb import TinyDB, Query
 from datetime import datetime
 
+
 class Transacoes:
     def __init__(self):
         self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
@@ -169,5 +170,20 @@ class SolicitaCredito:
         self.resultado = None
 
     def requisitar_emprestimo(self, gerente):
+        
+        if self.valor_solicitado <= 0:
+            self.resultado = "Valor de empréstimo inválido."
+            return self.resultado
+        
+        if self.renda < self.valor_solicitado / self.qtd_parcelas:
+            self.resultado = "Renda insuficiente para o valor solicitado."
+            return self.resultado
+        
+        if self.qtd_parcelas <= 0:
+            self.resultado = "Quantidade de parcelas inválida."
+            return self.resultado
+        
         self.resultado = gerente.aprovar_credito(self)
+        return self.resultado
 
+ 
