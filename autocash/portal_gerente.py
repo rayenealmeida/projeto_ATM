@@ -92,6 +92,8 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
         button_ok = Button(janela_confirmacao, text="OK", command=janela_confirmacao.destroy)
         button_ok.pack()
 
+
+    
     def verificar_campos():
         nome = entry_nome.get()
         telefone = entry_telefone.get()
@@ -104,20 +106,29 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
         cpf_ou_cnpj_num = ''.join(filter(str.isdigit, cpf_ou_cnpj))
 
         if nome and telefone and data_nascimento and cpf_ou_cnpj_num and endereco and renda and senha:
-            if senha.isdigit() and len(senha)>=6:
+            if senha.isdigit() and len(senha) >= 6:
                 try:
                     renda = float(renda)
-                    if cadastro_cliente.salvar_cadastro(nome, telefone, data_nascimento, cpf_ou_cnpj_num, endereco, renda, senha):
-                        entry_nome.delete(0, 'end')
-                        entry_telefone.delete(0, 'end')
-                        entry_data_nascimento.delete(0, 'end')
-                        entry_cpf_ou_cnpj.delete(0, 'end')
-                        entry_endereco.delete(0, 'end')
-                        entry_renda.delete(0, 'end')
-                        entry_senha.delete(0, 'end')
-                        exibir_janela_confirmacao()
+                    if validar_cpf(cpf_ou_cnpj_num):
+                        # CPF válido
+                        if cadastro_cliente.salvar_cadastro(nome, telefone, data_nascimento, cpf_ou_cnpj_num, endereco, renda, senha):
+                            entry_nome.delete(0, 'end')
+                            entry_telefone.delete(0, 'end')
+                            entry_data_nascimento.delete(0, 'end')
+                            entry_cpf_ou_cnpj.delete(0, 'end')
+                            entry_endereco.delete(0, 'end')
+                            entry_renda.delete(0, 'end')
+                            entry_senha.delete(0, 'end')
+                            exibir_janela_confirmacao()
+                        else:
+                            exibir_janela_reprovacao()
+                    elif validar_cnpj(cpf_ou_cnpj_num):
+                        # CNPJ válido
+                        # Faça o que for necessário para tratar o CNPJ
+                        pass
                     else:
-                        exibir_janela_reprovacao()
+                        import tkinter.messagebox as messagebox
+                        messagebox.showerror("Erro", "CPF ou CNPJ inválido.")
                 except ValueError:
                     import tkinter.messagebox as messagebox
                     messagebox.showerror("Erro", "Verifique se completou todos os campos corretamente.")
@@ -127,14 +138,48 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
                     messagebox.showerror("Erro", "A senha deve conter apenas números.")
                 else:
                     messagebox.showerror("Erro", "A senha deve ter pelo menos 6 dígitos.")
-        
         else:
             import tkinter.messagebox as messagebox
             messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
-        
+
     button_salvar = Button(janela, text='Cadastrar', command=verificar_campos)
     button_salvar.pack(side='top', padx=5)
     button_salvar.place(x=100, y=260)
+        
+    def validar_cpf(cpf):
+        if len(cpf) != 11:
+            return False
+
+        if cpf == cpf[0] * 11:
+            return False
+
+        soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
+        primeiro_digito = (soma * 10) % 11 % 10
+
+        soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
+        segundo_digito = (soma * 10) % 11 % 10
+
+        return primeiro_digito == int(cpf[9]) and segundo_digito == int(cpf[10])
+    
+    
+    def validar_cnpj(cnpj):
+        if len(cnpj) != 14:
+            return False
+
+        soma = sum(int(cnpj[i]) * (5 - i % 4) for i in range(12))
+        primeiro_digito = 11 - soma % 11
+        if primeiro_digito >= 10:
+            primeiro_digito = 0
+
+        # Calcula o segundo dígito verificador
+        soma = sum(int(cnpj[i]) * (6 - i % 5) for i in range(13))
+        segundo_digito = 11 - soma % 11
+        if segundo_digito >= 10:
+            segundo_digito = 0
+
+        # Verifica se os dígitos verificadores estão corretos
+        return primeiro_digito == int(cnpj[12]) and segundo_digito == int(cnpj[13])
+
 
 
     def voltar_para_painel(user_id):
