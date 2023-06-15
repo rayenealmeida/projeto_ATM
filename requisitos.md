@@ -15,6 +15,12 @@
 12. Visualizar
 13. Transferir 
 14. Atualizar
+15. Adicionar
+16. Excluir
+17. Solicitar
+18. Logar
+19. Imprimir
+20. Extrair
 
 # Lista de Substantivos
 
@@ -28,6 +34,13 @@
 8. Banco
 9. Transações
 10. Cliente
+11. Gerente
+12. Transação
+13. Pagamento
+14. Cadastro
+15. Login
+16. Saque
+17. Empréstimo
 
 
 
