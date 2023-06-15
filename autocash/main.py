@@ -4,7 +4,7 @@ from library.module import Transacoes, SolicitaCredito
 from PIL import ImageTk, Image
 from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class AutocashApp:
@@ -24,6 +24,18 @@ class AutocashApp:
         ######################################
         #         INÍCIO DAS FUNÇÕES         #
         ######################################
+
+        def botoes():
+            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
+            button_2 = tk.Button(self.janela, text= '2', width=2).place(x=166, y=404)
+            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
+            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
+            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
+            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
+            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
+            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
+            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
+            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)            
 
         # INÍCIO DA FUNÇÃO REALIZAR CADASTRO: OK #
         def realizar_cadastro():
@@ -73,16 +85,7 @@ class AutocashApp:
             entry_senha.pack()
             entry_senha.place(x=100, y=200)
 
-            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
-            button_2 = tk.Button(self.janela, text= '2', width=2).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
-            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
-            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
-            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
-            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
-            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
-            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
-            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            botoes()
             button_enter = tk.Button(self.janela, text= 'Enter', command=logar).place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2).place(x=113, y=512)
             button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
@@ -137,16 +140,7 @@ class AutocashApp:
             entry_valor.pack()
             entry_valor.place(x=100, y=150)
 
-            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
-            button_2 = tk.Button(self.janela, text='2', width=2).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
-            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
-            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
-            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
-            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
-            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
-            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
-            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            botoes()
             button_enter = tk.Button(self.janela, text='Enter', command=lambda: sacar(cliente_id))
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
@@ -217,16 +211,7 @@ class AutocashApp:
             label_cabecalho = tk.Label(self.janela, text=cliente["nome"].split()[0] + ", tecle enter para gerar o seu extrato.\nSeu saldo atual é: R$ " + str(cliente['saldo']), font=('normal', 12), justify="center", bg="#5FC0E6").place(x=60, y=120)
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=120, y=340)
 
-            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
-            button_2 = tk.Button(self.janela, text='2', width=2).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
-            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
-            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
-            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
-            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
-            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
-            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
-            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            botoes()
             button_enter = tk.Button(self.janela, text='Enter', command=lambda: extrato(cliente_id))
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
@@ -279,16 +264,7 @@ class AutocashApp:
             entry_valor.pack()
             entry_valor.place(x=100, y=150)
 
-            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
-            button_2 = tk.Button(self.janela, text='2', width=2).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
-            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
-            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
-            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
-            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
-            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
-            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
-            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            botoes()
             button_enter = tk.Button(self.janela, text='Enter', command=lambda: depositar(cliente_id))
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
@@ -303,6 +279,7 @@ class AutocashApp:
             nova_imagem = ImageTk.PhotoImage(nova_imagem)
             label.config(image=nova_imagem)
             label.image = nova_imagem
+            cliente = self.db.get(doc_id=cliente_id)
             
             mensagem_label = tk.Label(self.janela, text="", background="#5FC0E6", font=('normal', 11), justify="left")
             mensagem_label.pack()
@@ -317,22 +294,33 @@ class AutocashApp:
             entry_valor.pack()
             entry_valor.place(x=100, y=150)
 
+            label_credito_situacao = tk.Label(self.janela, text="", font=("Arial", 10), justify="left", background="#5FC0E6")
+            label_credito_situacao.pack()
+            label_credito_situacao.place(x=30, y=260)
+
+            label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
+
+            label_cabecalho = tk.Label(self.janela, text="Olá, " + cliente["nome"] + "\nfaça o seu pedido." + '\n\nPEDIDO DE CRÉDITO:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=70, y=50)
+
+            botoes()
+            button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
+            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
+
             def enviar_solicitacao(cliente_id):
                 print(cliente_id)
                 valor = float(entry_valor.get())
+                data_atual = datetime.now().date()
+                data_prox_fatura = data_atual + timedelta(days=30)
+                data_formatada = data_prox_fatura.strftime("%d/%m/%Y")
                 if valor <= 0:
-                    mensagem_label.configure(text="Valor Inválido. O valor da solicitação não pode ser zero.")
+                    label_credito_situacao.configure(text="O valor da solicitação não pode ser menor ou igual a 0.")
                 else:
-                    if solicitar.solicitacao(cliente_id, valor, data='16/06/2023'):
-                        print("APROVADO")
-                    else: print("Reprovado")
+                    if solicitar.solicitacao(cliente_id, valor, data_formatada):
+                        label_credito_situacao.configure(text="Parabéns, seu crédito foi aprovado!\nSua próxima fatura será debitada em 30 dias.")
+                    else: label_credito_situacao.configure(text="Que pena! Não foi dessa vez.\nSe você já fez um pedido de crédito, outra liberação\n só ocorrerá quando não houver mais débitos a serem feitos.")
 
-                label_credito = tk.Label(self.janela, text="Crédito solicitado!\nAguarde a aprovação do gerente.", font=("Arial", 11), background="#5FC0E6")
-                label_credito.pack()
-                label_credito.place(x=70, y=90)
-
-            button_solicitar = tk.Button(self.janela, text='Solicitar', command=lambda: enviar_solicitacao(cliente_id))
-            button_solicitar.place(x=100, y=180)
+            button_enter = tk.Button(self.janela, text='Enter', command=lambda: enviar_solicitacao(cliente_id))
+            button_enter.place(x=285, y=513)
 
         # INÍCIO DA FUNÇÃO PAGAMENTO
         def realizar_pagamento(cliente_id):
@@ -424,16 +412,7 @@ class AutocashApp:
             valor_entry = tk.Entry(self.janela)
             valor_entry.place(x=100, y=200)            
             
-            button_1 = tk.Button(self.janela, text= '1', width=2).place(x=113, y=404)
-            button_2 = tk.Button(self.janela, text='2', width=2).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
-            button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
-            button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
-            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
-            button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
-            button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
-            button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
-            button_0 = tk.Button(self.janela, text= '0', width=2).place(x=166, y=512)
+            botoes()
             button_enter = tk.Button(self.janela, text='Enter', command= lambda: pagamento(cliente_id))
             button_enter.place(x=285, y=513)
             button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
@@ -450,6 +429,9 @@ class AutocashApp:
 
             opcoes_texto = "Menu:\n\n1 - Extrato\n2 - Saque\n3 - Depósito\n4 - Realizar pagamento\n5 - Solicitar crédito\n6 - Sair\n\nEntre com a sua opção: _ "
 
+            def sair():
+                self.janela.destroy()
+
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=('normal', 13), justify="left", bg="#5FC0E6").place(x=70, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=lambda: abrir_extrato(cliente_id)).place(x=113, y=404)
@@ -457,7 +439,7 @@ class AutocashApp:
             button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_deposito(cliente_id)).place(x=219, y=404)
             button_4 = tk.Button(self.janela, text= '4', width=2, command=lambda: realizar_pagamento(cliente_id)).place(x=113, y=440)
             button_5 = tk.Button(self.janela, text= '5', width=2, command=lambda: solicita_credito(cliente_id)).place(x=166, y=440)
-            button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)
+            button_6 = tk.Button(self.janela, text= '6', width=2, command=sair).place(x=219, y=440)
             button_7 = tk.Button(self.janela, text= '7', width=2).place(x=113, y=476)
             button_8 = tk.Button(self.janela, text= '8', width=2).place(x=166, y=476)
             button_9 = tk.Button(self.janela, text= '9', width=2).place(x=219, y=476)
@@ -483,7 +465,7 @@ class AutocashApp:
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)
             button_2 = tk.Button(self.janela, text= '2', width=2, command= realizar_cadastro).place(x=166, y=404)
-            button_3 = tk.Button(self.janela, text= '3', width=2, command=lambda: abrir_menu(2)).place(x=219, y=404)
+            button_3 = tk.Button(self.janela, text= '3', width=2).place(x=219, y=404)
             button_4 = tk.Button(self.janela, text= '4', width=2).place(x=113, y=440)
             button_5 = tk.Button(self.janela, text= '5', width=2).place(x=166, y=440)
             button_6 = tk.Button(self.janela, text= '6', width=2).place(x=219, y=440)

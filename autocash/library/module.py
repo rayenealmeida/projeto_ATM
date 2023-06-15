@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 import json
 from tinydb import TinyDB, Query
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class Transacoes:
@@ -18,11 +18,10 @@ class Transacoes:
 
     def verificar_debitos(self):
         data_atual = datetime.now().date()
-
         clientes = self.obter_todos_clientes()
         for cliente_id in clientes:
             cliente = self.obter_cliente_por_id(str(cliente_id))
-            print(cliente)
+            # print(cliente)
             if cliente['solicita_credito'] == 1:
                 if cliente['valor_total_em_debito'] == 0:
                     self.db.update({'solicita_credito': 0}, doc_ids=[cliente_id])
@@ -32,11 +31,13 @@ class Transacoes:
                     self.db.update({'valor_total_em_debito': 0}, doc_ids=[cliente_id])
                 else:
                     dia_cobranca = datetime.strptime(cliente['dia_para_cobranca'], "%d/%m/%Y").date()
+                    data_prox_fatura = dia_cobranca + timedelta(days=30)
+                    data_formatada = data_prox_fatura.strftime("%d/%m/%Y")
                     if dia_cobranca <= data_atual:
                         valor_parcela = cliente['valor_parcelas']
                         if self.debitar_conta(cliente_id, valor_parcela):
                             self.registrar_transacao('Débito automático', valor_parcela, conta_origem=cliente_id)
-                            self.atualizar_dados(cliente_id, valor_parcela, dia_cobranca="15/07/2023")
+                            self.atualizar_dados(cliente_id, valor_parcela, dia_cobranca=data_formatada)
 
     def atualizar_dados(self, cliente_id, valor_parcela, dia_cobranca):
         cliente = self.db.get(doc_id=cliente_id)
@@ -235,5 +236,5 @@ class SolicitaCredito:
                 self.db.update({'valor_parcelas': valor_parcelas}, doc_ids=[conta])
                 self.db.update({'valor_total_em_debito': a_pagar}, doc_ids=[conta])
 
-            return True
+        return True
         
