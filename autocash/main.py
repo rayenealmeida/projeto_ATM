@@ -310,6 +310,11 @@ class AutocashApp:
             def solicitar(cliente_id):
                 cliente = self.db.get(doc_id=cliente_id)
                 valor = float(entry_valor.get())
+                
+                if valor == 0:
+                    messagebox.showwarning("Valor Inválido", "O valor da solicitação não pode ser zero.")
+                    return
+                
                 cpf = cliente['cpf']
                 renda = cliente['renda']
                 solicitacao = {
@@ -325,6 +330,7 @@ class AutocashApp:
                 label_credito.pack()
                 label_credito.place(x=70, y=90)
 
+                
             label_valor = tk.Label(self.janela, text='Valor:', background="#5FC0E6")
             label_valor.pack()
             label_valor.place(x=100, y=130)
