@@ -309,9 +309,9 @@ class AutocashApp:
 
             def solicitar(cliente_id):
                 cliente = self.db.get(doc_id=cliente_id)
-                valor = float(entry_valor.get())
+                credito = float(entry_valor.get())
                 
-                if valor == 0:
+                if credito == 0:
                     messagebox.showwarning("Valor Inválido", "O valor da solicitação não pode ser zero.")
                     return
                 
@@ -321,7 +321,7 @@ class AutocashApp:
                     'nome': cliente['nome'],
                     'cpf': cpf,
                     'renda': renda,
-                    'valor': valor
+                    'credito': credito
                 }
                 
                 self.db.insert(solicitacao)
