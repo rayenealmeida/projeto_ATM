@@ -172,7 +172,6 @@ class SolicitaCredito:
     def solicitacao(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         if cliente['solicita_credito'] == 1: return False
-
         else:
             cpf_cnpj = cliente['cpf_ou_cnpj']
             if len(cpf_cnpj) == 11:
