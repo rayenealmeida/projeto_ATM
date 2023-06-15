@@ -321,9 +321,9 @@ class AutocashApp:
                 
                 self.db.insert(solicitacao)
                 label_credito = tk.Label(self.janela, text="Crédito solicitado!\nAguarde a aprovação do gerente.",
-                                        font=("Arial", 20), background="#5FC0E6")
+                                        font=("Arial", 11), background="#5FC0E6")
                 label_credito.pack()
-                label_credito.place(x=100, y=150)
+                label_credito.place(x=70, y=90)
 
             label_valor = tk.Label(self.janela, text='Valor:', background="#5FC0E6")
             label_valor.pack()
