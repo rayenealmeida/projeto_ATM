@@ -74,7 +74,7 @@ class Transacoes:
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
 
-        if saldo >= valor and valor != 0:
+        if saldo >= valor and valor > 0:
             novo_saldo = saldo - valor
             novo_saldo = round(novo_saldo, 2)
             # print(novo_saldo, saldo, valor)
@@ -159,31 +159,36 @@ class CadastroCliente:
                 'solicita_credito': 0,
                 'valor_solicitado': 0,
                 'dia_para_cobranca': '',
+                'valor_parcelas': 0,
             })
             return True
     
 class SolicitaCredito:
-    def __init__(self, valor_solicitado, renda, qtd_parcelas):
-        self.valor_solicitado = valor_solicitado
-        self.renda = renda
-        self.qtd_parcelas = qtd_parcelas
-        self.resultado = None
+    def __init__(self):
+        self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
+        caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
+        self.db = TinyDB(caminho_banco_dados)
 
-    def requisitar_emprestimo(self, gerente):
-        
-        if self.valor_solicitado <= 0:
-            self.resultado = "Valor de empréstimo inválido."
-            return self.resultado
-        
-        if self.renda < self.valor_solicitado / self.qtd_parcelas:
-            self.resultado = "Renda insuficiente para o valor solicitado."
-            return self.resultado
-        
-        if self.qtd_parcelas <= 0:
-            self.resultado = "Quantidade de parcelas inválida."
-            return self.resultado
-        
-        self.resultado = gerente.aprovar_credito(self)
-        return self.resultado
+    def solicitacao(self, conta, valor):
+        cliente = self.db.get(doc_id=conta)
+        if cliente['solicita_credito'] == 1: return False
+        else:
+            cpf_cnpj = cliente['cpf_ou_cnpj']
+            if len(cpf_cnpj) == 11:
+                max_parcela = cliente['renda']
+            elif len(cpf_cnpj) == 14:
+                max_parcela = cliente['renda']*10
+            print(max_parcela)
+            montante = valor * 1.0149 ** 10
+            valor_parcelas = montante / 10
+            valor_parcelas = round(valor_parcelas,2)
 
+            if max_parcela < valor_parcelas:
+                return False
+            else:
+                self.db.update({'solicita_credito': 1}, doc_ids=[conta])
+                self.db.update({'valor_solicitado': valor}, doc_ids=[conta])
+                self.db.update({'dia_para_cobranca': valor}, doc_ids=[conta])
+                self.db.update({'valor_parcelas': valor_parcelas}, doc_ids=[conta])
+            return True
  

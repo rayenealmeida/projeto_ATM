@@ -228,7 +228,7 @@ def abrir_lista_solicitacoes(db):
 
         for solicitacao in solicitacoes:
             nome_cliente = solicitacao['nome']
-            cpf_cnpj = solicitacao['cpf']
+            cpf_cnpj = solicitacao['cpf_ou_cnpj']
             renda = solicitacao['renda']
             listbox.insert("end", f"Nome: {nome_cliente} | CPF/CNPJ: {cpf_cnpj} | Renda: {renda}")
 
@@ -238,7 +238,7 @@ def abrir_lista_solicitacoes(db):
             selecionado = listbox.curselection()
             if selecionado:
                 solicitacao = solicitacoes[selecionado[0]]
-                cpf = solicitacao['cpf']
+                cpf = solicitacao['cpf_ou_cnpj']
                 valor = solicitacao['valor']
                 cliente = db.get(Query().cpf == cpf)
                 cliente['credito'] += valor
@@ -251,7 +251,7 @@ def abrir_lista_solicitacoes(db):
             selecionado = listbox.curselection()
             if selecionado:
                 solicitacao = solicitacoes[selecionado[0]]
-                cpf = solicitacao['cpf']
+                cpf = solicitacao['cpf_ou_cnpj']
                 db.remove(doc_ids=[solicitacao.doc_id])
                 messagebox.showinfo("Rejeição de Crédito", f"Crédito rejeitado para o cliente com CPF/CNPJ: {cpf}")
                 janela_solicitacoes.destroy()
@@ -285,7 +285,7 @@ def abrir_login():
         user_id = None
 
         for cliente in db.all():
-            if cliente['cpf'] == cpf and cliente['senha'] == senha and cliente['cadastro_nivel'] == 2:
+            if cliente['cpf_ou_cnpj'] == cpf and cliente['senha'] == senha and cliente['cadastro_nivel'] == 2:
                 cliente_encontrado = True
                 user_id = cliente.doc_id
                 break
