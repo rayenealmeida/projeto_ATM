@@ -1,6 +1,6 @@
 import os, subprocess, tkinter as tk
 from tkinter import ttk, messagebox
-from library.module import Transacoes
+from library.module import Transacoes, SolicitaCredito
 from PIL import ImageTk, Image
 from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
@@ -308,30 +308,8 @@ class AutocashApp:
             mensagem_label.pack()
             mensagem_label.place(x=30, y=200)
 
-            def solicitar(cliente_id):
-                cliente = self.db.get(doc_id=cliente_id)
-                credito = float(entry_valor.get())
-                
-                if credito == 0:
-                    messagebox.showwarning("Valor Inválido", "O valor da solicitação não pode ser zero.")
-                    return
-                
-                cpf = cliente['cpf']
-                renda = cliente['renda']
-                solicitacao = {
-                    'nome': cliente['nome'],
-                    'cpf': cpf,
-                    'renda': renda,
-                    'credito': credito
-                }
-                
-                self.db.insert(solicitacao)
-                label_credito = tk.Label(self.janela, text="Crédito solicitado!\nAguarde a aprovação do gerente.",
-                                        font=("Arial", 11), background="#5FC0E6")
-                label_credito.pack()
-                label_credito.place(x=70, y=90)
+            solicitar = SolicitaCredito()
 
-                
             label_valor = tk.Label(self.janela, text='Valor:', background="#5FC0E6")
             label_valor.pack()
             label_valor.place(x=100, y=130)
@@ -339,11 +317,23 @@ class AutocashApp:
             entry_valor.pack()
             entry_valor.place(x=100, y=150)
 
-            button_solicitar = tk.Button(self.janela, text='Solicitar', command=lambda: solicitar(cliente_id))
+            def enviar_solicitacao(cliente_id):
+                print(cliente_id)
+                valor = float(entry_valor.get())
+                if valor <= 0:
+                    mensagem_label.configure(text="Valor Inválido. O valor da solicitação não pode ser zero.")
+                else:
+                    if solicitar.solicitacao(cliente_id, valor):
+                        print("APROVADO")
+                    else: print("Reprovado")
+
+                label_credito = tk.Label(self.janela, text="Crédito solicitado!\nAguarde a aprovação do gerente.", font=("Arial", 11), background="#5FC0E6")
+                label_credito.pack()
+                label_credito.place(x=70, y=90)
+
+            button_solicitar = tk.Button(self.janela, text='Solicitar', command=lambda: enviar_solicitacao(cliente_id))
             button_solicitar.place(x=100, y=180)
 
-                          
-        
         # INÍCIO DA FUNÇÃO PAGAMENTO
         def realizar_pagamento(cliente_id):
             imagem_tk = ImageTk.PhotoImage(imagem)
