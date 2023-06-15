@@ -56,7 +56,8 @@ class AutocashApp:
                     else:
                         label_cliente['text'] = 'CPF ou senha inválidos!'
                         label_cliente['bg'] = '#5FC0E6'
-       
+            
+             
             label_cpf_login= tk.Label(self.janela, text= 'CPF:', background="#5FC0E6")
             label_cpf_login.pack()
             label_cpf_login.place(x=100, y=130)
@@ -301,13 +302,23 @@ class AutocashApp:
             nova_imagem = ImageTk.PhotoImage(nova_imagem)
             label.config(image=nova_imagem)
             label.image = nova_imagem
+            
 
-            def solicitar(cliente_id):
+            def solicitar():
                 valor = float(entry_valor.get())
+                cliente_id = self.cliente_logado['id']
                 cliente = self.db.get(doc_id=cliente_id)
-                cliente['credito'] += valor
-                self.db.update(cliente, doc_ids=[cliente.doc_id])
-                label_credito = tk.Label(self.janela, text=f"Crédito solicitado!\nSeu crédito atual é: R${cliente['credito']:.2f}",
+                cpf = cliente['cpf']
+                renda = cliente['renda']
+                solicitacao = {
+                    'nome': cliente['nome'],
+                    'cpf': cpf,
+                    'renda': renda,
+                    'valor': valor
+                }
+                
+                self.db.insert(solicitacao)
+                label_credito = tk.Label(self.janela, text="Crédito solicitado!\nAguarde a aprovação do gerente.",
                                         font=("Arial", 20), background="#5FC0E6")
                 label_credito.pack()
                 label_credito.place(x=100, y=150)

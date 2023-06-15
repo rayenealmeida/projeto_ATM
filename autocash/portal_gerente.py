@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
-from library.module import CadastroCliente, SolicitaCredito
-from tkinter import Tk, Label, Entry, Button, Frame, Toplevel
+from library.module import CadastroCliente
+from tkinter import Tk, Label, Entry, Button, Frame, Toplevel, messagebox
 from tinydb import TinyDB
 import os, subprocess, tkinter as tk
 from PIL import ImageTk, Image
@@ -225,7 +225,36 @@ def abrir_lista_solicitacoes():
 
         scrollbar.config(command=listbox.yview)
 
+        def aprovar():
+            selecionado = listbox.curselection()
+            if selecionado:
+                solicitacao = solicitacoes[selecionado[0]]
+                cpf = solicitacao['cpf']
+                valor = solicitacao['valor']
+                cliente = db.get(Query().cpf == cpf)
+                cliente['credito'] += valor
+                db.update(cliente, Query().cpf == cpf)
+                db.remove(doc_ids=[solicitacao.doc_id])
+                messagebox.showinfo("Aprovação de Crédito", f"Crédito aprovado para o cliente {cliente['nome']}!")
+                janela_solicitacoes.destroy()
+                
+        def rejeitar():
+            selecionado = listbox.curselection()
+            if selecionado:
+                solicitacao = solicitacoes[selecionado[0]]
+                cpf = solicitacao['cpf']
+                db.remove(doc_ids=[solicitacao.doc_id])
+                messagebox.showinfo("Rejeição de Crédito", f"Crédito rejeitado para o cliente com CPF/CNPJ: {cpf}")
+                janela_solicitacoes.destroy()
+                
+        button_aprovar = tk.Button(janela_solicitacoes, text="Aprovar", command=aprovar)
+        button_aprovar.pack(side="left", padx=10, pady=10)
+
+        button_rejeitar = tk.Button(janela_solicitacoes, text="Rejeitar", command=rejeitar)
+        button_rejeitar.pack(side="left", padx=10, pady=10)         
+        
         janela_solicitacoes.mainloop()
+        
     else:
         janela_alerta = Toplevel(janela)
         janela_alerta.title("Sem Solicitações")
