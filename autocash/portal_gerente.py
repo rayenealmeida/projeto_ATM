@@ -198,14 +198,14 @@ def excluir_cliente():
     label_result_exclusao = tk.Label(janela_exclusao, text='')
     label_result_exclusao.pack(pady=10)
         
-def abrir_lista_solicitacoes():
+def abrir_lista_solicitacoes(db):
     button_cadastrar.destroy()
     button_solicitar_credito.destroy()
     button_excluir_cliente.destroy()
     label_msg_head.destroy()
 
     solicitacoes = db.search(Query().solicitacao_credito.exists())
-
+   
     if solicitacoes:
         janela_solicitacoes = Toplevel(janela)
         janela_solicitacoes.title("Solicitações de Crédito")
