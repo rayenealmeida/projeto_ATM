@@ -91,8 +91,6 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
 
         button_ok = Button(janela_confirmacao, text="OK", command=janela_confirmacao.destroy)
         button_ok.pack()
-
-
     
     def verificar_campos():
         nome = entry_nome.get()
@@ -142,43 +140,30 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
             import tkinter.messagebox as messagebox
             messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
 
-    button_salvar = Button(janela, text='Cadastrar', command=verificar_campos)
+    button_salvar = Button(janela, text='Cadastrar', command= verificar_campos)
     button_salvar.pack(side='top', padx=5)
     button_salvar.place(x=100, y=260)
-        
+
     def validar_cpf(cpf):
+        # Remover caracteres não numéricos
+        cpf = ''.join(filter(str.isdigit, cpf))
+
+        # Verificar se o CPF possui 11 dígitos
         if len(cpf) != 11:
             return False
 
-        if cpf == cpf[0] * 11:
-            return False
+        return True
 
-        soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
-        primeiro_digito = (soma * 10) % 11 % 10
 
-        soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
-        segundo_digito = (soma * 10) % 11 % 10
-
-        return primeiro_digito == int(cpf[9]) and segundo_digito == int(cpf[10])
-    
-    
     def validar_cnpj(cnpj):
+        # Remover caracteres não numéricos
+        cnpj = ''.join(filter(str.isdigit, cnpj))
+
+        # Verificar se o CNPJ possui 14 dígitos
         if len(cnpj) != 14:
             return False
 
-        soma = sum(int(cnpj[i]) * (5 - i % 4) for i in range(12))
-        primeiro_digito = 11 - soma % 11
-        if primeiro_digito >= 10:
-            primeiro_digito = 0
-
-        # Calcula o segundo dígito verificador
-        soma = sum(int(cnpj[i]) * (6 - i % 5) for i in range(13))
-        segundo_digito = 11 - soma % 11
-        if segundo_digito >= 10:
-            segundo_digito = 0
-
-        # Verifica se os dígitos verificadores estão corretos
-        return primeiro_digito == int(cnpj[12]) and segundo_digito == int(cnpj[13])
+        return True
 
 
 
