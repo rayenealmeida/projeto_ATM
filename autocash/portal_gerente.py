@@ -253,6 +253,7 @@ def abrir_lista_solicitacoes(db):
         button_rejeitar = tk.Button(janela_solicitacoes, text="Rejeitar", command=rejeitar)
         button_rejeitar.pack(side="left", padx=10, pady=10)         
         
+        janela_solicitacoes.mainloop()
         
     else:
         janela_alerta = Toplevel(janela)
