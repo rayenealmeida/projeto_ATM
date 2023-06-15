@@ -89,23 +89,24 @@ class Transacoes:
     def extrato(self, cliente_id):
         cliente = self.db.get(doc_id=cliente_id)
         transacoes_extrato = []
-
         if cliente and 'transacoes' in cliente:
-            transacoes = json.loads(cliente['transacoes'])
-            for transacao in transacoes:
-                data = transacao['data']
-                tipo = transacao['tipo']
-                valor = transacao['valor']
-                conta_origem = transacao['conta_origem']
-                conta_destino = transacao['conta_destino']
+            transacoes_json = cliente['transacoes']
+            if transacoes_json:
+                transacoes = json.loads(transacoes_json)
+                for transacao in transacoes:
+                    data = transacao['data']
+                    tipo = transacao['tipo']
+                    valor = transacao['valor']
+                    conta_origem = transacao['conta_origem']
+                    conta_destino = transacao['conta_destino']
 
-                if conta_destino is None:
-                    extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n---------------------"
-                    transacoes_extrato.append(extrato_str)
-                else:
-                    cliente_destino = self.db.get(doc_id=conta_destino)
-                    extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n" + "Transferido para: " + cliente_destino['nome'] + "\n---------------------"
-                    transacoes_extrato.append(extrato_str)
+                    if conta_destino is None:
+                        extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n---------------------"
+                        transacoes_extrato.append(extrato_str)
+                    else:
+                        cliente_destino = self.db.get(doc_id=conta_destino)
+                        extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n" + "Transferido para: " + cliente_destino['nome'] + "\n---------------------"
+                        transacoes_extrato.append(extrato_str)
 
         return transacoes_extrato
     
