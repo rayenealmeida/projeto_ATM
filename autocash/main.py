@@ -1,6 +1,6 @@
 import os, subprocess, tkinter as tk
 from tkinter import ttk, messagebox
-from library.module import Transacoes, SolicitaCredito
+from library.module import Transacoes, SolicitaCredito, VerificarBanco
 from PIL import ImageTk, Image
 from tinydb import TinyDB, Query
 import tkinter.messagebox as messagebox
@@ -459,8 +459,10 @@ class AutocashApp:
             
         while True:
             opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  1 - Fazer login\n  2 - Realizar cadastro'
-            verificar = Transacoes()
-            verificar.verificar_debitos()
+            verificar_debitos = Transacoes()
+            verificar_debitos.verificar_debitos()
+            verificar_banco = VerificarBanco()
+            verificar_banco.verificar_banco()
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("normal", 14), justify="left", bg="#5FC0E6", wraplength=300).place(x=80, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)

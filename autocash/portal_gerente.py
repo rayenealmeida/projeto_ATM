@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from library.module import CadastroCliente
+from library.module import CadastroCliente, VerificarBanco, Transacoes
 from tkinter import Tk, Label, Entry, Button, Frame, Toplevel, messagebox
 from tinydb import TinyDB
 import os, subprocess, tkinter as tk
@@ -356,6 +356,9 @@ def abrir_login():
     label_result_login = tk.Label(janela, text='')
     label_result_login.place(x=100, y=280)
     
-    
+verificar_debitos = Transacoes()
+verificar_debitos.verificar_debitos()
+verificar_banco = VerificarBanco()
+verificar_banco.verificar_banco()    
 abrir_login()
 janela.mainloop()

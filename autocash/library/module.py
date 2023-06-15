@@ -4,13 +4,11 @@ import json
 from tinydb import TinyDB, Query
 from datetime import datetime, timedelta
 
-
 class Transacoes:
     def __init__(self):
         self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
         caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
         self.db = TinyDB(caminho_banco_dados)
-        self.verificar_debitos()
         
     def obter_todos_clientes(self):
         clientes = self.db.table('_default').all()
@@ -21,7 +19,6 @@ class Transacoes:
         clientes = self.obter_todos_clientes()
         for cliente_id in clientes:
             cliente = self.obter_cliente_por_id(str(cliente_id))
-            # print(cliente)
             if cliente['solicita_credito'] == 1:
                 if cliente['valor_total_em_debito'] == 0:
                     self.db.update({'solicita_credito': 0}, doc_ids=[cliente_id])
@@ -38,6 +35,7 @@ class Transacoes:
                         if self.debitar_conta(cliente_id, valor_parcela):
                             self.registrar_transacao('Débito automático', valor_parcela, conta_origem=cliente_id)
                             self.atualizar_dados(cliente_id, valor_parcela, dia_cobranca=data_formatada)
+            else: return True
 
     def atualizar_dados(self, cliente_id, valor_parcela, dia_cobranca):
         cliente = self.db.get(doc_id=cliente_id)
@@ -237,4 +235,32 @@ class SolicitaCredito:
                 self.db.update({'valor_total_em_debito': a_pagar}, doc_ids=[conta])
 
         return True
-        
+
+class VerificarBanco:
+    def __init__(self):
+        self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
+        caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
+        self.db = TinyDB(caminho_banco_dados)
+        self.verificar_banco()
+    # Se o banco de dados for apagado, insere dados padrão para o gerente
+    def verificar_banco(self):
+        if len(self.db) == 0:
+            dados_padrao = {
+                        "cadastro_nivel": 2,
+                        "nome": "Clarice Bianca Bernardes",
+                        "telefone": "(88) 99881-4748",
+                        "data_nascimento": "26/02/1973",
+                        "cpf_ou_cnpj": "11111111111",
+                        "endereco": "Rua Clara Alves de Oliveira, Bastiana, Iguatu CE",
+                        "renda": 1789.0,
+                        "senha": "123456",
+                        "transacoes": "[{\"data\": \"15/06/2023 17:04:51\", \"tipo\": \"Pagamento\", \"valor\": 5.0, \"conta_origem\": 1, \"conta_destino\": 2}, {\"data\": \"15/06/2023 17:04:51\", \"tipo\": \"Pagamento Recebido\", \"valor\": 5.0, \"conta_origem\": 1, \"conta_destino\": 2}]",
+                        "saldo": 106.5,
+                        "solicita_credito": 1,
+                        "valor_solicitado": 1500.0,
+                        "dia_para_cobranca": "15/07/2023",
+                        "valor_parcelas": 173.91,
+                        "valor_total_em_debito": 1739.1,
+            }
+            self.db.insert(dados_padrao)
+            return True
