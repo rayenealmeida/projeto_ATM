@@ -3,22 +3,27 @@ import os
 import json
 from tinydb import TinyDB, Query
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 class Transacoes:
     def __init__(self):
         self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
         caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
         self.db = TinyDB(caminho_banco_dados)
+        self.verificar_debitos()
         
     def obter_todos_clientes(self):
         clientes = self.db.table('_default').all()
         return [cliente.doc_id for cliente in clientes]
 
     def verificar_debitos(self):
-        data_atual = datetime.now().date()
+        data_atual = datetime.now().strftime("%d/%m/%Y")
+
         clientes = self.obter_todos_clientes()
+        
         for cliente_id in clientes:
             cliente = self.obter_cliente_por_id(str(cliente_id))
+            print(cliente)
             if cliente['solicita_credito'] == 1:
                 if cliente['valor_total_em_debito'] == 0:
                     self.db.update({'solicita_credito': 0}, doc_ids=[cliente_id])
@@ -27,15 +32,15 @@ class Transacoes:
                     self.db.update({'valor_parcelas': 0}, doc_ids=[cliente_id])
                     self.db.update({'valor_total_em_debito': 0}, doc_ids=[cliente_id])
                 else:
-                    dia_cobranca = datetime.strptime(cliente['dia_para_cobranca'], "%d/%m/%Y").date()
-                    data_prox_fatura = dia_cobranca + timedelta(days=30)
+                    dia_cobranca = cliente['dia_para_cobranca']
+                    data_prox_fatura = datetime.strptime(dia_cobranca, "%d/%m/%Y") + timedelta(days=30)
                     data_formatada = data_prox_fatura.strftime("%d/%m/%Y")
-                    if dia_cobranca <= data_atual:
+                    # print(data_atual, data_formatada, dia_cobranca)
+                    if datetime.strptime(dia_cobranca, "%d/%m/%Y").date() <= datetime.strptime(data_atual, "%d/%m/%Y").date():
                         valor_parcela = cliente['valor_parcelas']
                         if self.debitar_conta(cliente_id, valor_parcela):
                             self.registrar_transacao('Débito automático', valor_parcela, conta_origem=cliente_id)
                             self.atualizar_dados(cliente_id, valor_parcela, dia_cobranca=data_formatada)
-            else: return True
 
     def atualizar_dados(self, cliente_id, valor_parcela, dia_cobranca):
         cliente = self.db.get(doc_id=cliente_id)
@@ -52,14 +57,12 @@ class Transacoes:
     def debitar_conta(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
-
-        if saldo >= valor and valor > 0:
-            novo_saldo = saldo - valor
-            self.registrar_transacao('Débito em conta', valor, conta_origem=conta)
-            self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
-            return True
-        else:
-            return False
+        print("entrou")
+        # if saldo >= valor and valor > 0: Cancelado, agora vai debitar e deixar valor negativo do saldo se tiver como 0
+        novo_saldo = saldo - valor
+        self.registrar_transacao('Débito em conta', valor, conta_origem=conta)
+        self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
+        return True
 
     # RESGISTRAR TRANSAÇÕES: APARENTEMENTE OK #
     def registrar_transacao(self, tipo, valor, conta_origem=None, conta_destino=None):
