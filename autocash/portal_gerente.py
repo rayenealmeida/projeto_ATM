@@ -158,18 +158,50 @@ def abrir_painel_gerente(user_id):
     global button_cadastrar
     global button_solicitar_credito
     global label_msg_head
+    global button_excluir_cliente
     user = db.get(doc_id=user_id)
     label_msg_head = tk.Label(janela, text= user["nome"].split()[0] + ', escolha uma das opções disponíveis abaixo:', font=('normal', 14))
     label_msg_head.place(x=100, y=130)
+    
+    button_excluir_cliente = tk.Button(janela, text='Excluir cliente', command=excluir_cliente)
+    button_excluir_cliente.place(x=470, y=170)
 
     button_cadastrar = tk.Button(janela, text= 'Cadastrar cliente', command=lambda: abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, label_msg_head))
     button_cadastrar.place(x=100, y=170)
     button_solicitar_credito = tk.Button(janela, text= 'Solicitações de crédito', command=abrir_lista_solicitacoes)
     button_solicitar_credito.place(x=260, y=170)
+    
+def excluir_cliente():
+    def confirmar_exclusão():
+        cpf_cnpj = entry_cpf_cnpj.get()
+        cliente = db.get(Query().cpf == cpf_cnpj)
+        if cliente:
+            db.remove(doc_ids=[cliente.doc_id])
+            label_result_exclusao.configure(text='Cliente excluído com sucesso!')
+        else:
+            label_result_exclusao.configure(text='Cliente não encontrado.')
 
+    janela_exclusao = tk.Toplevel(janela)
+    janela_exclusao.title("Excluir Cliente")
+    janela_exclusao.geometry("400x200")
+
+    label_cpf_cnpj = tk.Label(janela_exclusao, text='Informe o CPF/CNPJ do cliente:')
+    label_cpf_cnpj.pack(pady=10)
+
+    entry_cpf_cnpj = tk.Entry(janela_exclusao)
+    entry_cpf_cnpj.pack()
+
+    button_confirmar = tk.Button(janela_exclusao, text='Confirmar exclusão', command=confirmar_exclusão)
+    button_confirmar.pack(pady=10)
+    
+
+    label_result_exclusao = tk.Label(janela_exclusao, text='')
+    label_result_exclusao.pack(pady=10)
+        
 def abrir_lista_solicitacoes():
     button_cadastrar.destroy()
     button_solicitar_credito.destroy()
+    button_excluir_cliente.destroy()
     label_msg_head.destroy()
 
     solicitacoes = db.search(Query().solicitacao_credito.exists())
