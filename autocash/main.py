@@ -310,7 +310,6 @@ class AutocashApp:
             def solicitar(cliente_id):
                 cliente = self.db.get(doc_id=cliente_id)
                 valor = float(entry_valor.get())
-                cliente_id = self.cliente_logado['id']
                 cpf = cliente['cpf']
                 renda = cliente['renda']
                 solicitacao = {
@@ -333,7 +332,7 @@ class AutocashApp:
             entry_valor.pack()
             entry_valor.place(x=100, y=150)
 
-            button_solicitar = tk.Button(self.janela, text='Solicitar', command=solicitar)
+            button_solicitar = tk.Button(self.janela, text='Solicitar', command=lambda: solicitar(self.cliente_logado['id']))
             button_solicitar.place(x=100, y=180)
 
                           
