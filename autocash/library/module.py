@@ -10,16 +10,57 @@ class Transacoes:
         self.diretorio_pai = os.path.dirname(os.path.abspath(__file__))
         caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
         self.db = TinyDB(caminho_banco_dados)
+        self.verificar_debitos()
         
-    
-    def verificar_debitos(self, cliente):
+    def obter_todos_clientes(self):
+        clientes = self.db.table('_default').all()
+        return [cliente.doc_id for cliente in clientes]
+
+    def verificar_debitos(self):
         data_atual = datetime.now().date()
-        debitos = self.db.search((Query().conta_origem == cliente.numero_conta) & (Query().tipo == 'credito'))
-        for debito in debitos:
-            data_transacao = datetime.strptime(debito['data'], "%d/%m/%Y %H:%M:%S").date()
-            if data_transacao <= data_atual:
-                valor_parcela = debito['valor'] / cliente.qtd_parcelas
-                self.registrar_transacao('retirada', valor_parcela, conta_origem=cliente.numero_conta)
+
+        clientes = self.obter_todos_clientes()
+        for cliente_id in clientes:
+            cliente = self.obter_cliente_por_id(str(cliente_id))
+            print(cliente)
+            if cliente['solicita_credito'] == 1:
+                if cliente['valor_total_em_debito'] == 0:
+                    self.db.update({'solicita_credito': 0}, doc_ids=[cliente_id])
+                    self.db.update({'valor_solicitado': 0}, doc_ids=[cliente_id])
+                    self.db.update({'dia_para_cobranca': ""}, doc_ids=[cliente_id])
+                    self.db.update({'valor_parcelas': 0}, doc_ids=[cliente_id])
+                    self.db.update({'valor_total_em_debito': 0}, doc_ids=[cliente_id])
+                else:
+                    dia_cobranca = datetime.strptime(cliente['dia_para_cobranca'], "%d/%m/%Y").date()
+                    if dia_cobranca <= data_atual:
+                        valor_parcela = cliente['valor_parcelas']
+                        if self.debitar_conta(cliente_id, valor_parcela):
+                            self.registrar_transacao('Débito automático', valor_parcela, conta_origem=cliente_id)
+                            self.atualizar_dados(cliente_id, valor_parcela, dia_cobranca="15/07/2023")
+
+    def atualizar_dados(self, cliente_id, valor_parcela, dia_cobranca):
+        cliente = self.db.get(doc_id=cliente_id)
+        debito = cliente['valor_total_em_debito']
+        valor_atualizado = debito - valor_parcela
+        self.db.update({'valor_total_em_debito': valor_atualizado}, doc_ids=[cliente_id])
+        self.db.update({'dia_para_cobranca': dia_cobranca}, doc_ids=[cliente_id])
+
+    def obter_cliente_por_id(self, cliente_id):
+        cliente = self.db.table('_default').get(doc_id=cliente_id)
+        return cliente
+
+    # SAQUE: OK #
+    def debitar_conta(self, conta, valor):
+        cliente = self.db.get(doc_id=conta)
+        saldo = cliente['saldo']
+
+        if saldo >= valor and valor > 0:
+            novo_saldo = saldo - valor
+            self.registrar_transacao('Débito em conta', valor, conta_origem=conta)
+            self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
+            return True
+        else:
+            return False
 
     # RESGISTRAR TRANSAÇÕES: APARENTEMENTE OK #
     def registrar_transacao(self, tipo, valor, conta_origem=None, conta_destino=None):
@@ -160,6 +201,7 @@ class CadastroCliente:
                 'valor_solicitado': 0,
                 'dia_para_cobranca': '',
                 'valor_parcelas': 0,
+                'valor_total_em_debito': 0,
             })
             return True
     
@@ -169,7 +211,7 @@ class SolicitaCredito:
         caminho_banco_dados = os.path.join(os.path.dirname(self.diretorio_pai), 'banco_de_dados.json')
         self.db = TinyDB(caminho_banco_dados)
 
-    def solicitacao(self, conta, valor):
+    def solicitacao(self, conta, valor, data):
         cliente = self.db.get(doc_id=conta)
         if cliente['solicita_credito'] == 1: return False
         else:
@@ -182,13 +224,16 @@ class SolicitaCredito:
             montante = valor * 1.0149 ** 10
             valor_parcelas = montante / 10
             valor_parcelas = round(valor_parcelas,2)
+            a_pagar = valor_parcelas*10
 
             if max_parcela < valor_parcelas:
                 return False
             else:
                 self.db.update({'solicita_credito': 1}, doc_ids=[conta])
                 self.db.update({'valor_solicitado': valor}, doc_ids=[conta])
-                self.db.update({'dia_para_cobranca': valor}, doc_ids=[conta])
+                self.db.update({'dia_para_cobranca': data}, doc_ids=[conta])
                 self.db.update({'valor_parcelas': valor_parcelas}, doc_ids=[conta])
+                self.db.update({'valor_total_em_debito': a_pagar}, doc_ids=[conta])
+
             return True
- 
+        

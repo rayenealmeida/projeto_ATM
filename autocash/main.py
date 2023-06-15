@@ -48,7 +48,7 @@ class AutocashApp:
                 senha = entry_senha.get()
                 
                 for indice, cliente in enumerate(self.db.all()):
-                    if cliente['cpf'] == cpf and cliente['senha'] == senha:
+                    if cliente['cpf_ou_cnpj'] == cpf and cliente['senha'] == senha:
                         label_cliente['text'] = 'Login realizado com sucesso!'
                         label_cliente['bg'] = '#5FC0E6'
                         cliente_id = indice+1
@@ -323,7 +323,7 @@ class AutocashApp:
                 if valor <= 0:
                     mensagem_label.configure(text="Valor Inválido. O valor da solicitação não pode ser zero.")
                 else:
-                    if solicitar.solicitacao(cliente_id, valor):
+                    if solicitar.solicitacao(cliente_id, valor, data='16/06/2023'):
                         print("APROVADO")
                     else: print("Reprovado")
 
@@ -377,7 +377,7 @@ class AutocashApp:
                     return False
                 
                 for indice, destinatario in enumerate(self.db.all()):
-                    if destinatario['cpf'] == cpf:
+                    if destinatario['cpf_ou_cnpj'] == cpf:
                         destinatario_id = indice+1
                         destinatario = self.db.get(doc_id=destinatario_id)
                         transacao = Transacoes()
@@ -392,6 +392,8 @@ class AutocashApp:
                                 return False
                                 
                         if transacao.realizar_pagamento(cliente_id, destinatario_id, valor, data_agendamento, hora_agendamento):
+                            cliente = self.db.get(doc_id=cliente_id)
+                            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=70, y=50)
                             mensagem_label = tk.Label(self.janela, text='Pagamento realizado com sucesso', background="#5FC0E6")
                             mensagem_label.place(x=100, y=120)
                             cliente = self.db.get(doc_id=cliente_id)
@@ -475,7 +477,8 @@ class AutocashApp:
             
         while True:
             opcoes_texto = 'Bem-vindo ao autocash.\nEscolha uma das opções abaixo:\n\n  1 - Fazer login\n  2 - Realizar cadastro'
-
+            verificar = Transacoes()
+            verificar.verificar_debitos()
             label_opcoes = tk.Label(self.janela, text=opcoes_texto, font=("normal", 14), justify="left", bg="#5FC0E6", wraplength=300).place(x=80, y=90)
 
             button_1 = tk.Button(self.janela, text= '1', width=2, command=fazer_login).place(x=113, y=404)
