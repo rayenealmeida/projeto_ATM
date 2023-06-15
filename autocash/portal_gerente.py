@@ -31,7 +31,6 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
     button_solicitar_credito.destroy()
     label_msg_head.destroy()
 
-    button_solicitar_credito
     label_nome = Label(janela, text='Nome:')
     label_nome.place(x=100, y=130)
     entry_nome = Entry(janela)
@@ -82,14 +81,14 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
         button_ok.pack()
 
     def exibir_janela_reprovacao():
-        janela_reprovacao = tk.Toplevel(janela)
-        janela_reprovacao.title("Cadastro Reprovado")
-        janela_reprovacao.geometry("300x100")
+        janela_confirmacao = Toplevel(janela)
+        janela_confirmacao.title("Cadastro Aprovado!")
+        janela_confirmacao.geometry("300x100")
 
-        label_reprovacao = tk.Label(janela_reprovacao, text="Cadastro reprovado")
-        label_reprovacao.pack(pady=20)
+        label_confirmacao = Label(janela_confirmacao, text="Cadastro aprovado")
+        label_confirmacao.pack(pady=20)
 
-        button_ok = tk.Button(janela_reprovacao, text="OK", command=janela_reprovacao.destroy)
+        button_ok = Button(janela_confirmacao, text="OK", command=janela_confirmacao.destroy)
         button_ok.pack()
 
     def verificar_campos():
@@ -128,6 +127,7 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
     button_salvar.pack(side='top', padx=5)
     button_salvar.place(x=100, y=260)
 
+
     def voltar_para_painel(user_id):
         entry_nome.destroy()
         entry_telefone.destroy()
@@ -151,16 +151,61 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
     button_voltar = Button(janela, text='Voltar a tela principal', command=lambda: voltar_para_painel(user_id))
     button_voltar.pack(side='top', padx=5)
     button_voltar.place(x=100, y=360)
+    
+
 
 def abrir_painel_gerente(user_id):
+    global button_cadastrar
+    global button_solicitar_credito
+    global label_msg_head
     user = db.get(doc_id=user_id)
     label_msg_head = tk.Label(janela, text= user["nome"].split()[0] + ', escolha uma das opções disponíveis abaixo:', font=('normal', 14))
     label_msg_head.place(x=100, y=130)
 
     button_cadastrar = tk.Button(janela, text= 'Cadastrar cliente', command=lambda: abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, label_msg_head))
     button_cadastrar.place(x=100, y=170)
-    button_solicitar_credito = tk.Button(janela, text= 'Solicitar crédito', command=abrir_tela_cadastro)
-    button_solicitar_credito.place(x=200, y=170)
+    button_solicitar_credito = tk.Button(janela, text= 'Solicitações de crédito', command=abrir_lista_solicitacoes)
+    button_solicitar_credito.place(x=260, y=170)
+
+def abrir_lista_solicitacoes():
+    button_cadastrar.destroy()
+    button_solicitar_credito.destroy()
+    label_msg_head.destroy()
+
+    solicitacoes = db.search(Query().solicitacao_credito.exists())
+
+    if solicitacoes:
+        janela_solicitacoes = Toplevel(janela)
+        janela_solicitacoes.title("Solicitações de Crédito")
+        janela_solicitacoes.geometry("600x400")
+
+        scrollbar = tk.Scrollbar(janela_solicitacoes)
+        scrollbar.pack(side="right", fill="y")
+
+        listbox = tk.Listbox(janela_solicitacoes, yscrollcommand=scrollbar.set)
+        listbox.pack(fill="both", expand=True)
+
+        for solicitacao in solicitacoes:
+            nome_cliente = solicitacao['nome']
+            cpf_cnpj = solicitacao['cpf']
+            renda = solicitacao['renda']
+            listbox.insert("end", f"Nome: {nome_cliente} | CPF/CNPJ: {cpf_cnpj} | Renda: {renda}")
+
+        scrollbar.config(command=listbox.yview)
+
+        janela_solicitacoes.mainloop()
+    else:
+        janela_alerta = Toplevel(janela)
+        janela_alerta.title("Sem Solicitações")
+        janela_alerta.geometry("300x100")
+
+        label_alerta = Label(janela_alerta, text="Não há solicitações de crédito no momento.")
+        label_alerta.pack(pady=20)
+
+        button_ok = Button(janela_alerta, text="OK", command=janela_alerta.destroy)
+        button_ok.pack(pady=10)
+
+        janela_alerta.mainloop()
 
 def abrir_login():
     def logar():
@@ -210,6 +255,7 @@ def abrir_login():
 
     label_result_login = tk.Label(janela, text='')
     label_result_login.place(x=100, y=280)
-
+    
+    
 abrir_login()
 janela.mainloop()
