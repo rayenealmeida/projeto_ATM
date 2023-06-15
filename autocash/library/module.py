@@ -190,7 +190,7 @@ class CadastroCliente:
                 'nome': nome,
                 'telefone': telefone,
                 'data_nascimento': data_nascimento,
-                'cpf': cpf_ou_cnpj,
+                'cpf_ou_cnpj': cpf_ou_cnpj,
                 'endereco': endereco,
                 'renda': renda,
                 'senha': senha,
