@@ -28,6 +28,7 @@ label = tk.Label(janela, image=imagem_tk).place(x=0, y=-235, relwidth=1, relheig
 
 def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, label_msg_head):
     button_cadastrar.destroy()
+    button_excluir_cliente.destroy()
     button_solicitar_credito.destroy()
     label_msg_head.destroy()
 
@@ -103,26 +104,34 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
         cpf_ou_cnpj_num = ''.join(filter(str.isdigit, cpf_ou_cnpj))
 
         if nome and telefone and data_nascimento and cpf_ou_cnpj_num and endereco and renda and senha:
-            try:
-                renda = float(renda)
-                if cadastro_cliente.salvar_cadastro(nome, telefone, data_nascimento, cpf_ou_cnpj_num, endereco, renda, senha):
-                    entry_nome.delete(0, 'end')
-                    entry_telefone.delete(0, 'end')
-                    entry_data_nascimento.delete(0, 'end')
-                    entry_cpf_ou_cnpj.delete(0, 'end')
-                    entry_endereco.delete(0, 'end')
-                    entry_renda.delete(0, 'end')
-                    entry_senha.delete(0, 'end')
-                    exibir_janela_confirmacao()
-                else:
-                    exibir_janela_reprovacao()
-            except ValueError:
+            if senha.isdigit() and len(senha)>=6:
+                try:
+                    renda = float(renda)
+                    if cadastro_cliente.salvar_cadastro(nome, telefone, data_nascimento, cpf_ou_cnpj_num, endereco, renda, senha):
+                        entry_nome.delete(0, 'end')
+                        entry_telefone.delete(0, 'end')
+                        entry_data_nascimento.delete(0, 'end')
+                        entry_cpf_ou_cnpj.delete(0, 'end')
+                        entry_endereco.delete(0, 'end')
+                        entry_renda.delete(0, 'end')
+                        entry_senha.delete(0, 'end')
+                        exibir_janela_confirmacao()
+                    else:
+                        exibir_janela_reprovacao()
+                except ValueError:
+                    import tkinter.messagebox as messagebox
+                    messagebox.showerror("Erro", "Verifique se completou todos os campos corretamente.")
+            else:
                 import tkinter.messagebox as messagebox
-                messagebox.showerror("Erro", "Verifique se completou todos os campos corretamente.")
+                if not senha.isdigit():
+                    messagebox.showerror("Erro", "A senha deve conter apenas números.")
+                else:
+                    messagebox.showerror("Erro", "A senha deve ter pelo menos 6 dígitos.")
+        
         else:
             import tkinter.messagebox as messagebox
             messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
-
+        
     button_salvar = Button(janela, text='Cadastrar', command=verificar_campos)
     button_salvar.pack(side='top', padx=5)
     button_salvar.place(x=100, y=260)
