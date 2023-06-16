@@ -23,7 +23,7 @@ class Transacoes:
         
         for cliente_id in clientes:
             cliente = self.obter_cliente_por_id(str(cliente_id))
-            print(cliente)
+            # print(cliente)
             if cliente['solicita_credito'] == 1:
                 if cliente['valor_total_em_debito'] == 0:
                     self.db.update({'solicita_credito': 0}, doc_ids=[cliente_id])
@@ -57,7 +57,6 @@ class Transacoes:
     def debitar_conta(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
-        print("entrou")
         # if saldo >= valor and valor > 0: Cancelado, agora vai debitar e deixar valor negativo do saldo se tiver como 0
         novo_saldo = saldo - valor
         self.registrar_transacao('Débito em conta', valor, conta_origem=conta)
@@ -228,7 +227,7 @@ class SolicitaCredito:
                 max_parcela = cliente['renda']
             elif len(cpf_cnpj) == 14:
                 max_parcela = cliente['renda']*10
-            print(max_parcela)
+            # print(max_parcela)
             montante = valor * 1.0149 ** 10
             valor_parcelas = montante / 10
             valor_parcelas = round(valor_parcelas,2)
@@ -263,13 +262,14 @@ class VerificarBanco:
                         "endereco": "Rua Clara Alves de Oliveira, Bastiana, Iguatu CE",
                         "renda": 1789.0,
                         "senha": "123456",
-                        "transacoes": "[{\"data\": \"15/06/2023 17:04:51\", \"tipo\": \"Pagamento\", \"valor\": 5.0, \"conta_origem\": 1, \"conta_destino\": 2}, {\"data\": \"15/06/2023 17:04:51\", \"tipo\": \"Pagamento Recebido\", \"valor\": 5.0, \"conta_origem\": 1, \"conta_destino\": 2}]",
+                        "transacoes": "",
                         "saldo": 106.5,
                         "solicita_credito": 1,
                         "valor_solicitado": 1500.0,
-                        "dia_para_cobranca": "15/07/2023",
+                        "dia_para_cobranca": "15/06/2023",
                         "valor_parcelas": 173.91,
                         "valor_total_em_debito": 1739.1,
+                        "solicita_exclusao": 0,
             }
             self.db.insert(dados_padrao)
             return True
