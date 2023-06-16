@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-06-16T00:53:14.789Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0" etag="Cq3v7PM6aAyvOSoZ1PCt" version="21.3.4" type="github">
+<mxfile host="app.diagrams.net" modified="2023-06-16T00:58:21.332Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0" etag="wkYXgsuWx46f81rSjsM3" version="21.4.0" type="github">
   <diagram name="Página-1" id="8KdyglChLffSIVppSK2g">
     <mxGraphModel dx="1046" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -84,7 +84,7 @@
         <mxCell id="0S2fw-j61M1fCiDEMuSU-26" value="" style="line;strokeWidth=2;direction=south;html=1;rotation=-90;" parent="1" vertex="1">
           <mxGeometry x="687" y="270" width="10" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="0S2fw-j61M1fCiDEMuSU-27" value="B2" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="0S2fw-j61M1fCiDEMuSU-27" value="B1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="607" y="318" width="40" height="30" as="geometry" />
         </mxCell>
         <mxCell id="0S2fw-j61M1fCiDEMuSU-28" value="Extrato" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
