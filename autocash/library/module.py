@@ -53,12 +53,12 @@ class Transacoes:
         cliente = self.db.table('_default').get(doc_id=cliente_id)
         return cliente
 
-    # SAQUE: OK #
     def debitar_conta(self, conta, valor):
         cliente = self.db.get(doc_id=conta)
         saldo = cliente['saldo']
         # if saldo >= valor and valor > 0: Cancelado, agora vai debitar e deixar valor negativo do saldo se tiver como 0
         novo_saldo = saldo - valor
+        novo_saldo = round(novo_saldo, 2)
         self.registrar_transacao('Débito em conta', valor, conta_origem=conta)
         self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
         return True

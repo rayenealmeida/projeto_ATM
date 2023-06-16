@@ -1,0 +1,19 @@
+------- INICIO
+
+ ## PORTAL DO GERENTE ##
+    - Funciona como se o cliente tivesse ido até uma agência do banco solicitar uma conta ou exclusão.
+    - Rodando o portal_gerente.py, é possível ter acesso as funcionalidades de cadastramento e exclusão de contas. Como o painel é restrito somente ao gerente, você deve usar as credenciais de acesso abaixo:
+    CPF: 11111111111 Senha: 123456
+    - Não é possível fazer a exclusão da conta do gerente.
+
+## CAIXA ELETRÔNICO ##
+    - Após realizada a abertura da conta, o cliente pode utilizar o caixa Eletrônico e realizar funções como:
+    Depósitos, pagamentos para outras contas do mesmo banco, saques, solicitações de créditos e impressão do extrato bancário. 
+    Abaixo algumas credenciais de clientes pré cadastrados:
+    CPF: 43181551457 Senha: 654321
+    CPF: 01218575735 Senha: 987654
+    Ou se preferir, realize o cadastramento de novos clientes no portal do gerente.
+    - O pagamento programado como explicado em aula pelo professor, aqui foi empregado como débito em conta e pode ser visto ao solicitar um extrato, para isso o cliente selecionado deve ter feito um pedido de crédito e já pago a primeita parcela. Toda vez que o painel do gerente ou o caixa eletrônico são executados, o programa faz uma varredura e verifica se é necessário cobrar o débito automático de algum cliente. Para ver a funcionalidade sem precisar esperar a data da próxima fatura, basta localizar a chave '"dia_para_cobranca": "15/07/2023",' no cliente desejado e alterar para uma data anterior. Em seguida execute o programa. O débito será realizado e resgistrado no extrato e uma nova data para a próxima fatura será atribuida.
+    - Todos os clientes pré-cadastrados já possuem solicitações de crédito, nesse caso uma nova solicitação só poderá ser feita quando o saldo devedor for = 0. Nesse sentido recomendamos que cadastre novos clientes para que possa fazer novas solicitações.
+
+------- FIM
