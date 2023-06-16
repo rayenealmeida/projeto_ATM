@@ -64,7 +64,7 @@ class Transacoes:
         self.db.update({'saldo': novo_saldo}, doc_ids=[conta])
         return True
 
-    # RESGISTRAR TRANSAÇÕES: APARENTEMENTE OK #
+    # RESGISTRAR TRANSAÇÕES: OK#
     def registrar_transacao(self, tipo, valor, conta_origem=None, conta_destino=None):
         data_atual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -92,10 +92,13 @@ class Transacoes:
     def extrato(self, cliente_id):
         cliente = self.db.get(doc_id=cliente_id)
         transacoes_extrato = []
+        
         if cliente and 'transacoes' in cliente:
             transacoes_json = cliente['transacoes']
+            
             if transacoes_json:
                 transacoes = json.loads(transacoes_json)
+                
                 for transacao in transacoes:
                     data = transacao['data']
                     tipo = transacao['tipo']
@@ -108,10 +111,14 @@ class Transacoes:
                         transacoes_extrato.append(extrato_str)
                     else:
                         cliente_destino = self.db.get(doc_id=conta_destino)
-                        extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n" + "Transferido para: " + cliente_destino['nome'] + "\n---------------------"
+                        if tipo == 'Pagamento recebido':
+                            extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n" + "Transferido por: " + cliente_destino['nome'] + "\n---------------------"
+                        else:
+                            extrato_str = "Data: " + data + "\n" + "Tipo: " + tipo + "\n" + "Valor: R$ " + str(valor) + "\n" + "Transferido para: " + cliente_destino['nome'] + "\n---------------------"
                         transacoes_extrato.append(extrato_str)
 
         return transacoes_extrato
+
     
     # SAQUE: OK #
     def saque(self, conta, valor):
@@ -144,7 +151,7 @@ class Transacoes:
             return False
 
 
-    def realizar_pagamento(self, conta_origem, conta_destino, valor, data_agendamento=None, hora_agendamento=None):
+    def realizar_pagamento(self, conta_origem, conta_destino, valor):
         if valor >= 0 and conta_origem != conta_destino: 
             cliente_origem = self.db.get(doc_id=conta_origem)
             cliente_destino = self.db.get(doc_id=conta_destino)
@@ -156,14 +163,11 @@ class Transacoes:
                 novo_saldo_origem = saldo_origem - valor
                 novo_saldo_destino = saldo_destino + valor
                 
-                self.registrar_transacao('Pagamento', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+                self.registrar_transacao('Pagamento', valor, conta_origem, conta_destino)
                 self.db.update({'saldo': novo_saldo_origem}, doc_ids=[conta_origem])
                 self.db.update({'saldo': novo_saldo_destino}, doc_ids=[conta_destino])
                 
-                if data_agendamento and hora_agendamento:
-                    data_hora_agendamento = datetime.strptime(f"{data_agendamento} {hora_agendamento}", "%d-%m-%Y %H:%M")
-                
-                self.registrar_transacao('Pagamento Recebido', valor, conta_origem=conta_origem, conta_destino=conta_destino)
+                self.registrar_transacao('Pagamento recebido', valor, conta_destino, conta_origem)
 
                 return True
             else:
@@ -205,6 +209,7 @@ class CadastroCliente:
                 'dia_para_cobranca': '',
                 'valor_parcelas': 0,
                 'valor_total_em_debito': 0,
+                'solicita_exclusao': 0
             })
             return True
     

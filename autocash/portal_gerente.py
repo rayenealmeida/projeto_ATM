@@ -26,10 +26,9 @@ imagem = Image.open(diretorio_atual + "/images/portal_gerente.png")
 imagem_tk = ImageTk.PhotoImage(imagem)
 label = tk.Label(janela, image=imagem_tk).place(x=0, y=-235, relwidth=1, relheight=1)
 
-def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, label_msg_head):
+def abrir_tela_cadastro(user_id, button_cadastrar, label_msg_head):
     button_cadastrar.destroy()
     button_excluir_cliente.destroy()
-    button_solicitar_credito.destroy()
     label_msg_head.destroy()
 
     label_nome = Label(janela, text='Nome:')
@@ -195,30 +194,29 @@ def abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, lab
 
 def abrir_painel_gerente(user_id):
     global button_cadastrar
-    global button_solicitar_credito
     global label_msg_head
     global button_excluir_cliente
     user = db.get(doc_id=user_id)
     label_msg_head = tk.Label(janela, text= user["nome"].split()[0] + ', escolha uma das opções disponíveis abaixo:', font=('normal', 14))
     label_msg_head.place(x=100, y=130)
     
-    button_excluir_cliente = tk.Button(janela, text='Excluir cliente', command=excluir_cliente)
+    button_excluir_cliente = tk.Button(janela, text='Excluir cliente', command=abrir_exclusao)
     button_excluir_cliente.place(x=470, y=170)
 
-    button_cadastrar = tk.Button(janela, text= 'Cadastrar cliente', command=lambda: abrir_tela_cadastro(user_id, button_cadastrar, button_solicitar_credito, label_msg_head))
+    button_cadastrar = tk.Button(janela, text= 'Cadastrar cliente', command=lambda: abrir_tela_cadastro(user_id, button_cadastrar, label_msg_head))
     button_cadastrar.place(x=100, y=170)
-    button_solicitar_credito = tk.Button(janela, text= 'Solicitações de crédito', command=abrir_lista_solicitacoes)
-    button_solicitar_credito.place(x=260, y=170)
-    
-def excluir_cliente():
+
+def abrir_exclusao():
     def confirmar_exclusão():
         cpf_cnpj = entry_cpf_cnpj.get()
-        cliente = db.get(Query().cpf == cpf_cnpj)
+        cliente = db.get(Query().cpf_ou_cnpj == cpf_cnpj)
         if cliente:
-            db.remove(doc_ids=[cliente.doc_id])
-            label_result_exclusao.configure(text='Cliente excluído com sucesso!')
-        else:
-            label_result_exclusao.configure(text='Cliente não encontrado.')
+            cliente_id = cliente.doc_id
+            if cliente_id != 1:
+                db.update({'solicita_exclusao': 1}, doc_ids=[cliente_id])
+                label_result_exclusao.configure(text='Cliente excluído com sucesso!')
+            else:
+                label_result_exclusao.configure(text='Erro, verifique o CPF e tente novamente.')
 
     janela_exclusao = tk.Toplevel(janela)
     janela_exclusao.title("Excluir Cliente")
@@ -232,80 +230,10 @@ def excluir_cliente():
 
     button_confirmar = tk.Button(janela_exclusao, text='Confirmar exclusão', command=confirmar_exclusão)
     button_confirmar.pack(pady=10)
-    
 
     label_result_exclusao = tk.Label(janela_exclusao, text='')
     label_result_exclusao.pack(pady=10)
-        
-def abrir_lista_solicitacoes(db):
-    button_cadastrar.destroy()
-    button_solicitar_credito.destroy()
-    button_excluir_cliente.destroy()
-    label_msg_head.destroy()
 
-    solicitacoes = db.search(Query().solicitacao_credito.exists())
-   
-    if solicitacoes:
-        janela_solicitacoes = Toplevel(janela)
-        janela_solicitacoes.title("Solicitações de Crédito")
-        janela_solicitacoes.geometry("600x400")
-
-        scrollbar = tk.Scrollbar(janela_solicitacoes)
-        scrollbar.pack(side="right", fill="y")
-
-        listbox = tk.Listbox(janela_solicitacoes, yscrollcommand=scrollbar.set)
-        listbox.pack(fill="both", expand=True)
-
-        for solicitacao in solicitacoes:
-            nome_cliente = solicitacao['nome']
-            cpf_cnpj = solicitacao['cpf_ou_cnpj']
-            renda = solicitacao['renda']
-            listbox.insert("end", f"Nome: {nome_cliente} | CPF/CNPJ: {cpf_cnpj} | Renda: {renda}")
-
-        scrollbar.config(command=listbox.yview)
-
-        def aprovar():
-            selecionado = listbox.curselection()
-            if selecionado:
-                solicitacao = solicitacoes[selecionado[0]]
-                cpf = solicitacao['cpf_ou_cnpj']
-                valor = solicitacao['valor']
-                cliente = db.get(Query().cpf == cpf)
-                cliente['credito'] += valor
-                db.update(cliente, Query().cpf == cpf)
-                db.remove(doc_ids=[solicitacao.doc_id])
-                messagebox.showinfo("Aprovação de Crédito", f"Crédito aprovado para o cliente {cliente['nome']}!")
-                janela_solicitacoes.destroy()
-                
-        def rejeitar():
-            selecionado = listbox.curselection()
-            if selecionado:
-                solicitacao = solicitacoes[selecionado[0]]
-                cpf = solicitacao['cpf_ou_cnpj']
-                db.remove(doc_ids=[solicitacao.doc_id])
-                messagebox.showinfo("Rejeição de Crédito", f"Crédito rejeitado para o cliente com CPF/CNPJ: {cpf}")
-                janela_solicitacoes.destroy()
-                
-        button_aprovar = tk.Button(janela_solicitacoes, text="Aprovar", command=aprovar)
-        button_aprovar.pack(side="left", padx=10, pady=10)
-
-        button_rejeitar = tk.Button(janela_solicitacoes, text="Rejeitar", command=rejeitar)
-        button_rejeitar.pack(side="left", padx=10, pady=10)         
-        
-        janela_solicitacoes.mainloop()
-        
-    else:
-        janela_alerta = Toplevel(janela)
-        janela_alerta.title("Sem Solicitações")
-        janela_alerta.geometry("300x100")
-
-        label_alerta = Label(janela_alerta, text="Não há solicitações de crédito no momento.")
-        label_alerta.pack(pady=20)
-
-        button_ok = Button(janela_alerta, text="OK", command=janela_alerta.destroy)
-        button_ok.pack(pady=10)
-
-        janela_alerta.mainloop()
 
 def abrir_login():
     def logar():
@@ -337,7 +265,7 @@ def abrir_login():
         button_enter.destroy()
         label_result_login.destroy()
 
-    label_msg_head= tk.Label(janela, text= 'Olá grente, para acessar o sistema, faça o seu login:', font=('normal', 14))
+    label_msg_head= tk.Label(janela, text= 'Olá gerente, para acessar o sistema, faça o seu login:', font=('normal', 14))
     label_msg_head.place(x=100, y=130)
 
     label_cpf_login= tk.Label(janela, text='CPF:')
