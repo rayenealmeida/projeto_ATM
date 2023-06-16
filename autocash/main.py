@@ -332,7 +332,7 @@ class AutocashApp:
             label.config(image=nova_imagem)
             label.image = nova_imagem
             cliente = self.db.get(doc_id=cliente_id)
-            
+
             label_rodape = tk.Label(self.janela, text='Use "*" para voltar ao menu', font=('normal', 11), justify="left", bg="#5FC0E6").place(x=90, y=340)
             label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=70, y=50)
 
@@ -348,48 +348,60 @@ class AutocashApp:
                     hora_agendamento_label.place_forget()
                     hora_agendamento_entry.place_forget()
 
-            
             def pagamento(cliente_id):
                 cpf = conta_destino_entry.get()
-                valor = float(valor_entry.get())
                 valor_str = valor_entry.get()
-                valor_str = valor_str.replace(',','.')
+                valor_str = valor_str.replace(',', '.')
                 valor = float(valor_str)
-                
-                data_agendamento = data_agendamento_entry.get()
-                hora_agendamento = hora_agendamento_entry.get()
-                
+
                 if valor <= 0:
                     mensagem_label = tk.Label(self.janela, text='Valor inválido', background="#5FC0E6")
                     mensagem_label.place(x=100, y=120)
                     return False
-                
-                for indice, destinatario in enumerate(self.db.all()):
-                    if destinatario['cpf_ou_cnpj'] == cpf:
-                        destinatario_id = indice+1
-                        destinatario = self.db.get(doc_id=destinatario_id)
-                        transacao = Transacoes()
-                        
-                        if agendar_pagamento_var.get():
-                            data_agendamento=data_agendamento_entry.get()
-                            hora_agendamento = hora_agendamento_entry.get()
-                            
-                            if not data_agendamento or not hora_agendamento:
-                                mensagem_label=tk.Label(self.janela, text='Preencha a data e a hora do agendamento', background="#5FC0E6")
-                                mensagem_label.place(x=100, y=250)
-                                return False
-                                
-                        if transacao.realizar_pagamento(cliente_id, destinatario_id, valor, data_agendamento, hora_agendamento):
-                            cliente = self.db.get(doc_id=cliente_id)
-                            label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=70, y=50)
-                            mensagem_label = tk.Label(self.janela, text='Pagamento realizado com sucesso', background="#5FC0E6")
-                            mensagem_label.place(x=100, y=120)
-                            cliente = self.db.get(doc_id=cliente_id)
-                            return True
-                        else:
-                            mensagem_label = tk.Label(self.janela, text='ERRO! Transação não realizada',background="#5FC0E6")
-                            mensagem_label.place(x=100, y=120)
-                            return False
+
+                destinatario = None
+                for item in self.db:
+                    if item['cpf_ou_cnpj'] == cpf:
+                        destinatario = item
+                        break
+
+                if destinatario is None:
+                    mensagem_label = tk.Label(self.janela, text='Destinatário não encontrado', background="#5FC0E6")
+                    mensagem_label.place(x=100, y=120)
+                    return False
+
+                transacao = Transacoes(self.db)
+
+                if agendar_pagamento_var.get():
+                    data_agendamento = data_agendamento_entry.get()
+                    hora_agendamento = hora_agendamento_entry.get()
+
+                    if not data_agendamento or not hora_agendamento:
+                        mensagem_label = tk.Label(self.janela, text='Preencha a data e a hora do agendamento', background="#5FC0E6")
+                        mensagem_label.place(x=100, y=250)
+                        return False
+
+                    if transacao.programar_pagamento(cliente_id, destinatario['id'], valor, data_agendamento, hora_agendamento):
+                        mensagem_label = tk.Label(self.janela, text='Pagamento agendado com sucesso', background="#5FC0E6")
+                        mensagem_label.place(x=100, y=120)
+                        return True
+                    else:
+                        mensagem_label = tk.Label(self.janela, text='ERRO! Agendamento não realizado', background="#5FC0E6")
+                        mensagem_label.place(x=100, y=120)
+                        return False
+                else:
+                    if transacao.realizar_pagamento(cliente_id, destinatario['id'], valor):
+                        cliente = self.db.get(doc_id=cliente_id)
+                        label_cabecalho = tk.Label(self.janela, text=cliente["nome"] + ", seu saldo é:\nR$ " + str(cliente['saldo']) + '\n\nREALIZAR TRANSFERÊNCIA:', font=('normal', 11), justify="center", bg="#5FC0E6").place(x=70, y=50)
+                        mensagem_label = tk.Label(self.janela, text='Pagamento realizado com sucesso', background="#5FC0E6")
+                        mensagem_label.place(x=100, y=120)
+                        cliente = self.db.get(doc_id=cliente_id)
+                        return True
+                    else:
+                        mensagem_label = tk.Label(self.janela, text='ERRO! Transação não realizada', background="#5FC0E6")
+                        mensagem_label.place(x=100, y=120)
+                        return False
+
             agendar_pagamento_var = tk.BooleanVar()
             agendar_pagamento_checkbox = tk.Checkbutton(self.janela, text="Agendar pagamento", variable=agendar_pagamento_var, bg="#5FC0E6", command=mostrar_campos_agendamento)
             agendar_pagamento_checkbox.place(x=100, y=225)
@@ -401,7 +413,7 @@ class AutocashApp:
             hora_agendamento_entry = tk.Entry(self.janela)
 
             mostrar_campos_agendamento()
-            
+
             conta_destino_label = tk.Label(self.janela, text="CPF/CNPJ da conta de destino:", background="#5FC0E6")
             conta_destino_label.place(x=100, y=140)
             conta_destino_entry = tk.Entry(self.janela)
@@ -410,14 +422,14 @@ class AutocashApp:
             valor_label = tk.Label(self.janela, text="Valor do pagamento:", background="#5FC0E6")
             valor_label.place(x=100, y=180)
             valor_entry = tk.Entry(self.janela)
-            valor_entry.place(x=100, y=200)            
-            
+            valor_entry.place(x=100, y=200)
+
             botoes()
-            button_enter = tk.Button(self.janela, text='Enter', command= lambda: pagamento(cliente_id))
+            button_enter = tk.Button(self.janela, text='Enter', command=lambda: pagamento(cliente_id))
             button_enter.place(x=285, y=513)
-            button_asterisco = tk.Button(self.janela, text= '*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
-            button_hashtag = tk.Button(self.janela, text= '#').place(x=219, y=513)
-            
+            button_asterisco = tk.Button(self.janela, text='*', width=2, command=lambda: abrir_menu(cliente_id)).place(x=113, y=512)
+            button_hashtag = tk.Button(self.janela, text='#').place(x=219, y=513)
+
         # INÍCIO DA FUNÇÃO MENU #
         def abrir_menu(cliente_id):
             imagem_tk = ImageTk.PhotoImage(imagem)
