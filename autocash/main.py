@@ -381,7 +381,7 @@ class AutocashApp:
                         mensagem_label.place(x=100, y=250)
                         return False
 
-                    if transacao.programar_pagamento(cliente_id, destinatario['id'], valor, data_agendamento, hora_agendamento):
+                    if transacao.pagamento_programado(valor, cliente):
                         mensagem_label = tk.Label(self.janela, text='Pagamento agendado com sucesso', background="#5FC0E6")
                         mensagem_label.place(x=100, y=120)
                         return True
